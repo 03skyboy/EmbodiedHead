@@ -1,0 +1,1496 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>EmbodiedHead Live Demo</title>
+  <style>
+    :root {
+      --bg: #ecf1f6;
+      --card: rgba(255, 255, 255, 0.72);
+      --card-strong: #ffffff;
+      --line: rgba(15, 23, 42, 0.08);
+      --line-strong: rgba(15, 23, 42, 0.14);
+      --text: #111827;
+      --muted: #667085;
+      --brand: #0f172a;
+      --ok: #0f9d58;
+      --warn: #b45309;
+      --focus-ring: rgba(84, 132, 255, 0.28);
+      --shadow: 0 18px 40px rgba(15, 23, 42, 0.1);
+      --radius-xl: 22px;
+      --radius-md: 14px;
+    }
+
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      color: var(--text);
+      font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", "Noto Sans SC", sans-serif;
+      background:
+        radial-gradient(circle at 0% 0%, rgba(120, 151, 186, 0.2), transparent 38%),
+        radial-gradient(circle at 100% 0%, rgba(182, 196, 213, 0.16), transparent 34%),
+        linear-gradient(180deg, #fafcfe 0%, var(--bg) 100%);
+      min-height: 100vh;
+      display: grid;
+      place-items: center;
+      padding: 22px;
+      overflow: hidden;
+      position: relative;
+      isolation: isolate;
+    }
+    body::before {
+      content: "";
+      position: fixed;
+      inset: -120px;
+      background:
+        radial-gradient(circle at 22% 18%, rgba(255, 255, 255, 0.85), transparent 34%),
+        radial-gradient(circle at 78% 12%, rgba(255, 255, 255, 0.7), transparent 32%),
+        radial-gradient(circle at 50% 100%, rgba(214, 225, 239, 0.4), transparent 40%);
+      filter: blur(24px);
+      pointer-events: none;
+      z-index: -1;
+    }
+
+    .shell {
+      width: min(1180px, 100%);
+      height: calc(100vh - 44px);
+      display: grid;
+      grid-template-columns: 340px 1fr;
+      gap: 18px;
+      align-items: stretch;
+      position: relative;
+      z-index: 1;
+    }
+
+    .panel {
+      background: var(--card);
+      backdrop-filter: blur(22px) saturate(135%);
+      -webkit-backdrop-filter: blur(22px) saturate(135%);
+      border: 1px solid var(--line);
+      border-radius: var(--radius-xl);
+      box-shadow: var(--shadow);
+    }
+
+    .settings {
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      min-height: 0;
+      overflow: hidden;
+    }
+
+    .settings-top {
+      display: grid;
+      gap: 12px;
+      padding: 18px 18px 12px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .settings-body {
+      min-height: 0;
+      overflow: auto;
+      display: grid;
+      gap: 14px;
+      padding: 14px 18px;
+      align-content: start;
+    }
+
+    .settings-bottom {
+      padding: 12px 18px 18px;
+      border-top: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.58);
+    }
+
+    .title {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+    }
+    .title-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .title h1 {
+      margin: 0;
+      font-size: 20px;
+      letter-spacing: -0.01em;
+    }
+    .status {
+      font-size: 13px;
+      color: var(--warn);
+      font-weight: 600;
+    }
+    .status.ok { color: var(--ok); }
+    .stage-status {
+      padding: 6px 10px;
+      border-radius: 999px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+      line-height: 1;
+      white-space: nowrap;
+    }
+    .status-row {
+      display: flex;
+      align-items: center;
+      min-height: 18px;
+    }
+
+    .lang-toggle {
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.76);
+      color: var(--text);
+      border-radius: 999px;
+      min-width: 58px;
+      height: 30px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 4px;
+      padding: 0 10px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      transition: transform .16s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+    }
+    .lang-toggle:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      background: rgba(255, 255, 255, 0.9);
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+    }
+    .lang-toggle:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus-ring);
+    }
+
+    .group {
+      display: grid;
+      gap: 8px;
+      padding: 12px;
+      border: 1px solid var(--line);
+      background: rgba(255, 255, 255, 0.62);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: var(--radius-md);
+    }
+    .group label {
+      font-size: 12px;
+      color: var(--muted);
+      font-weight: 600;
+    }
+
+    input[type="text"], select {
+      width: 100%;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      padding: 10px 12px;
+      font-size: 14px;
+      background: rgba(255, 255, 255, 0.9);
+      color: var(--text);
+      outline: none;
+      transition: border-color .16s ease, box-shadow .16s ease, background-color .16s ease;
+    }
+    input[type="text"]:hover, select:hover {
+      border-color: var(--line-strong);
+      background: #fff;
+    }
+    input[type="text"]:focus, select:focus {
+      border-color: rgba(58, 95, 166, 0.45);
+      box-shadow: 0 0 0 4px var(--focus-ring);
+      background: #fff;
+    }
+
+    .btn-row { display: flex; gap: 8px; flex-wrap: wrap; }
+    .btn {
+      border: 1px solid transparent;
+      border-radius: 11px;
+      padding: 10px 12px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform .16s ease, opacity .16s ease, box-shadow .18s ease, border-color .18s ease, background-color .18s ease;
+    }
+    .btn:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 14px rgba(15, 23, 42, 0.08);
+    }
+    .btn:focus-visible {
+      outline: none;
+      box-shadow: 0 0 0 4px var(--focus-ring);
+    }
+    .btn:active { transform: translateY(1px); }
+    .btn.primary {
+      background: linear-gradient(180deg, #1f2937, #111827);
+      border-color: rgba(17, 24, 39, 0.4);
+      color: white;
+      box-shadow: 0 10px 20px rgba(17, 24, 39, 0.2);
+    }
+    .btn.secondary {
+      background: rgba(255, 255, 255, 0.88);
+      border-color: var(--line);
+      color: #111827;
+    }
+    .btn.upload-action {
+      background: linear-gradient(180deg, rgba(247, 250, 253, 0.96), rgba(238, 244, 249, 0.95));
+      color: #334155;
+      border-color: rgba(148, 163, 184, 0.45);
+      box-shadow: 0 8px 14px rgba(15, 23, 42, 0.07);
+    }
+    .btn.upload-action:hover:not(:disabled) {
+      border-color: rgba(100, 116, 139, 0.55);
+      background: linear-gradient(180deg, #ffffff, rgba(240, 246, 252, 0.96));
+    }
+    .btn:disabled { opacity: .55; cursor: not-allowed; }
+
+    .voice-hint {
+      font-size: 12px;
+      color: var(--muted);
+      line-height: 1.45;
+      min-height: 2.8em;
+      padding: 8px 10px;
+      border: 1px dashed var(--line);
+      border-radius: 10px;
+      background: rgba(255, 255, 255, 0.72);
+      white-space: pre-line;
+    }
+
+    .identity-list {
+      display: grid;
+      gap: 8px;
+      max-height: 220px;
+      overflow: auto;
+      padding-right: 2px;
+    }
+    .identity-item {
+      display: grid;
+      grid-template-columns: 44px 1fr auto;
+      gap: 10px;
+      align-items: center;
+      padding: 8px;
+      border: 1px solid var(--line);
+      border-radius: 10px;
+      cursor: pointer;
+      background: rgba(255, 255, 255, 0.9);
+      transition: transform .16s ease, border-color .18s ease, box-shadow .18s ease;
+    }
+    .identity-item:hover {
+      transform: translateY(-1px);
+      border-color: var(--line-strong);
+      box-shadow: 0 10px 16px rgba(15, 23, 42, 0.08);
+    }
+    .identity-item.active {
+      border-color: rgba(31, 41, 55, 0.55);
+      box-shadow: inset 0 0 0 1px rgba(17, 24, 39, 0.45);
+    }
+    .identity-item img {
+      width: 44px;
+      height: 44px;
+      object-fit: cover;
+      border-radius: 10px;
+      background: #f3f4f6;
+    }
+    .identity-item .name {
+      font-size: 14px;
+      font-weight: 600;
+    }
+    .identity-delete {
+      border: 1px solid #fbc9c9;
+      background: rgba(255, 245, 245, 0.95);
+      color: #b42318;
+      border-radius: 8px;
+      font-size: 12px;
+      padding: 6px 8px;
+      cursor: pointer;
+      transition: border-color .16s ease, background-color .16s ease, transform .16s ease;
+    }
+    .identity-delete:hover {
+      background: #ffe9e9;
+      border-color: #f5a8a8;
+      transform: translateY(-1px);
+    }
+    .file-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      min-width: 0;
+    }
+    .file-name {
+      min-width: 0;
+      font-size: 12px;
+      color: var(--muted);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .stage {
+      padding: 18px;
+      display: grid;
+      grid-template-rows: auto 1fr auto;
+      gap: 12px;
+      min-height: 0;
+    }
+    .stage-head {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      color: var(--muted);
+      font-size: 13px;
+    }
+
+    .video-wrap {
+      width: 100%;
+      min-height: 0;
+      display: grid;
+      place-items: center;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      background: linear-gradient(180deg, rgba(255,255,255,0.8), rgba(242,246,250,0.72));
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      overflow: hidden;
+    }
+    canvas {
+      width: min(620px, 90%);
+      max-height: calc(100vh - 220px);
+      aspect-ratio: 1/1;
+      border-radius: 14px;
+      border: 1px solid rgba(0, 0, 0, 0.08);
+      box-shadow: 0 18px 40px rgba(17, 24, 39, 0.12);
+      background: #000;
+      object-fit: contain;
+    }
+
+    .stage-foot {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      min-width: 0;
+    }
+
+    .stats {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 12px;
+      min-width: 0;
+    }
+
+    .stage-actions {
+      margin-left: auto;
+      display: flex;
+      gap: 8px;
+    }
+    .pill {
+      padding: 5px 9px;
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.8);
+      border: 1px solid var(--line);
+      backdrop-filter: blur(8px);
+      -webkit-backdrop-filter: blur(8px);
+    }
+
+    .blocking-modal {
+      position: fixed;
+      inset: 0;
+      display: none;
+      align-items: center;
+      justify-content: center;
+      background: rgba(15, 23, 42, 0.25);
+      backdrop-filter: blur(10px) saturate(120%);
+      -webkit-backdrop-filter: blur(10px) saturate(120%);
+      z-index: 999;
+      padding: 20px;
+    }
+    .blocking-modal.show {
+      display: flex;
+    }
+    .blocking-modal-card {
+      width: min(360px, 92vw);
+      background: rgba(255, 255, 255, 0.86);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      box-shadow: 0 16px 40px rgba(15, 23, 42, 0.22);
+      padding: 20px;
+      text-align: center;
+      backdrop-filter: blur(14px);
+      -webkit-backdrop-filter: blur(14px);
+    }
+    .blocking-modal-spinner {
+      width: 24px;
+      height: 24px;
+      border-radius: 50%;
+      border: 3px solid rgba(15, 23, 42, 0.15);
+      border-top-color: #0f172a;
+      margin: 0 auto 12px;
+      animation: spin 0.8s linear infinite;
+    }
+    .blocking-modal-text {
+      font-size: 14px;
+      color: var(--text);
+      line-height: 1.45;
+      font-weight: 600;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    @media (max-width: 980px) {
+      .shell { grid-template-columns: 1fr; }
+      .shell { height: auto; }
+      body { overflow: auto; }
+      .settings { grid-template-rows: auto auto auto; }
+      .settings-body { overflow: visible; }
+      .video-wrap { min-height: 360px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="shell">
+    <aside class="panel settings">
+      <div class="settings-top">
+        <div class="title">
+          <h1>EmbodiedHead</h1>
+          <div class="title-actions">
+            <button id="langToggleBtn" class="lang-toggle" type="button">🌐</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-body">
+        <div class="group">
+        <label id="backendOriginLabel">后端公网地址</label>
+        <input id="backendOriginInput" type="text" placeholder="例如 https://xxxx.trycloudflare.com" />
+        <div id="backendOriginHint" class="voice-hint">-</div>
+        <div class="btn-row">
+          <button id="backendSaveBtn" class="btn secondary" type="button">应用后端地址</button>
+          <button id="backendClearBtn" class="btn secondary" type="button">清除</button>
+        </div>
+        </div>
+
+        <div class="group">
+        <label id="identityLabel">身份（选择已有身份，或上传新图片）</label>
+        <div class="identity-list" id="identityList"></div>
+        <input id="identityName" type="text" placeholder="新身份名称（可选）" />
+        <input id="identityFile" type="file" accept="image/png,image/jpeg" hidden />
+        <div class="file-row">
+          <button id="identityFileBtn" class="btn secondary" type="button">第1步：选择图片</button>
+          <span id="identityFileName" class="file-name">未选择文件</span>
+        </div>
+        <div class="btn-row">
+          <button id="uploadBtn" class="btn upload-action">第2步：上传并初始化身份</button>
+        </div>
+        </div>
+
+        <div class="group">
+        <label id="voiceLabel">音色（Qwen Omni）</label>
+        <select id="voiceSelect"></select>
+        <div id="voiceHint" class="voice-hint">-</div>
+        </div>
+
+        <div class="group">
+        <label id="modeLabelLeft">模式</label>
+        <select id="modeSelect">
+          <option value="talk">听说模式（调用大模型）</option>
+          <option value="listen">仅聆听模式（不调用大模型）</option>
+          <option value="mimic">模仿模式（不调用大模型，用户音频驱动说话）</option>
+        </select>
+      </div>
+      </div>
+
+      <div class="settings-bottom">
+        <div class="btn-row">
+        <button id="saveConfigBtn" class="btn secondary">保存设置</button>
+        <button id="sessionBtn" class="btn primary">开始实时会话</button>
+        </div>
+      </div>
+    </aside>
+
+    <main class="panel stage">
+      <div class="stage-head">
+        <span id="stageTitle">实时渲染窗口</span>
+        <div id="status" class="status stage-status">未连接</div>
+      </div>
+      <div class="video-wrap">
+        <canvas id="canvas" width="512" height="512"></canvas>
+      </div>
+      <div class="stage-foot">
+        <div class="stats" id="stats">
+          <span class="pill">WS: -</span>
+          <span class="pill">缓冲帧: -</span>
+          <span class="pill">状态: idle</span>
+        </div>
+        <div class="stage-actions">
+          <button id="muteBtn" class="btn secondary" disabled>静音播放</button>
+        </div>
+      </div>
+    </main>
+  </div>
+
+  <div id="blockingModal" class="blocking-modal" role="dialog" aria-modal="true" aria-live="assertive">
+    <div class="blocking-modal-card">
+      <div class="blocking-modal-spinner"></div>
+      <div id="blockingModalText" class="blocking-modal-text">后台正在初始化身份，请稍候...</div>
+    </div>
+  </div>
+
+  <script src="backend-config.js"></script>
+  <script>
+    const statusEl = document.getElementById("status");
+    const sessionBtn = document.getElementById("sessionBtn");
+    const saveConfigBtn = document.getElementById("saveConfigBtn");
+    const uploadBtn = document.getElementById("uploadBtn");
+    const muteBtn = document.getElementById("muteBtn");
+    const langToggleBtn = document.getElementById("langToggleBtn");
+    const backendOriginLabelEl = document.getElementById("backendOriginLabel");
+    const backendOriginInputEl = document.getElementById("backendOriginInput");
+    const backendOriginHintEl = document.getElementById("backendOriginHint");
+    const backendSaveBtnEl = document.getElementById("backendSaveBtn");
+    const backendClearBtnEl = document.getElementById("backendClearBtn");
+    const identityLabelEl = document.getElementById("identityLabel");
+    const voiceLabelEl = document.getElementById("voiceLabel");
+    const modeLabelLeftEl = document.getElementById("modeLabelLeft");
+    const stageTitleEl = document.getElementById("stageTitle");
+    const identityListEl = document.getElementById("identityList");
+    const identityNameEl = document.getElementById("identityName");
+    const identityFileEl = document.getElementById("identityFile");
+    const identityFileBtnEl = document.getElementById("identityFileBtn");
+    const identityFileNameEl = document.getElementById("identityFileName");
+    const voiceSelectEl = document.getElementById("voiceSelect");
+    const voiceHintEl = document.getElementById("voiceHint");
+    const modeSelectEl = document.getElementById("modeSelect");
+    const statsEl = document.getElementById("stats");
+    const blockingModalEl = document.getElementById("blockingModal");
+    const blockingModalTextEl = document.getElementById("blockingModalText");
+
+    const canvas = document.getElementById("canvas");
+    const ctx = canvas.getContext("2d");
+
+    let ws = null;
+    let audioContext = null;
+    let processor = null;
+    let source = null;
+    let mediaStream = null;
+    let playbackGainNode = null;
+    let selectedIdentityId = "";
+    let audioPlayCursorSec = 0;
+    let llmAudioSampleRate = 16000;
+    let uiBusy = false;
+    let isRealtimeRunning = false;
+    let manualStopping = false;
+    let isMuted = false;
+    let currentLang = localStorage.getItem("demo_lang") || "zh";
+    let identitiesCache = [];
+    let voicesCache = [];
+    let runtimeModeCode = "idle";
+    let statsBufferFrames = "-";
+
+    const BACKEND_STORAGE_KEY = "demo_backend_origin";
+    const requiresExplicitBackend = location.hostname.endsWith("github.io");
+
+    function normalizeBackendOrigin(value) {
+      const raw = String(value || "").trim();
+      if (!raw) return "";
+      try {
+        return new URL(raw).origin;
+      } catch (_) {
+        return "";
+      }
+    }
+
+    function resolveBackendOrigin() {
+      const params = new URLSearchParams(location.search);
+      const queryValue = normalizeBackendOrigin(params.get("backend") || "");
+      if (queryValue) {
+        localStorage.setItem(BACKEND_STORAGE_KEY, queryValue);
+        return queryValue;
+      }
+
+      const configValue = normalizeBackendOrigin(window.__DEMO_BACKEND_ORIGIN__ || "");
+      if (configValue) return configValue;
+
+      return normalizeBackendOrigin(localStorage.getItem(BACKEND_STORAGE_KEY) || "");
+    }
+
+    let backendOrigin = resolveBackendOrigin();
+
+    function resolveBackendUrl(pathOrUrl) {
+      const raw = String(pathOrUrl || "");
+      if (/^https?:\/\//i.test(raw)) return raw;
+      if (!backendOrigin) return raw;
+      return new URL(raw, `${backendOrigin}/`).toString();
+    }
+
+    function resolveBackendImageUrl(pathOrUrl) {
+      return resolveBackendUrl(pathOrUrl);
+    }
+
+    function resolveBackendWebSocketUrl(pathname) {
+      if (!backendOrigin) {
+        const proto = location.protocol === "https:" ? "wss:" : "ws:";
+        return `${proto}//${location.host}${pathname}`;
+      }
+
+      const originUrl = new URL(backendOrigin);
+      const wsProto = originUrl.protocol === "https:" ? "wss:" : "ws:";
+      return `${wsProto}//${originUrl.host}${pathname}`;
+    }
+
+    const VOICE_META = {
+      Cherry: { zh: "芊悦", zhDesc: "阳光积极、亲切自然小姐姐", enDesc: "Bright, friendly, and upbeat female voice" },
+      Serena: { zh: "苏瑶", zhDesc: "温柔小姐姐", enDesc: "Soft and gentle female voice" },
+      Ethan: { zh: "晨煦", zhDesc: "标准普通话，阳光温暖有活力", enDesc: "Warm and energetic male Mandarin voice" },
+      Chelsie: { zh: "千雪", zhDesc: "二次元虚拟女友风格", enDesc: "Anime-style virtual girlfriend tone" },
+      Momo: { zh: "茉兔", zhDesc: "撒娇搞怪，轻松活泼", enDesc: "Playful and teasing cute style" },
+      Vivian: { zh: "十三", zhDesc: "可爱小暴躁，个性鲜明", enDesc: "Cute but feisty personality voice" },
+      Moon: { zh: "月白", zhDesc: "率性帅气，偏中性音色", enDesc: "Cool, confident, slightly androgynous tone" },
+      Maia: { zh: "四月", zhDesc: "知性温柔，表达细腻", enDesc: "Intellectual and tender female voice" },
+      Kai: { zh: "凯", zhDesc: "听感舒适，沉稳亲和", enDesc: "Smooth and steady male voice" },
+      Nofish: { zh: "不吃鱼", zhDesc: "特色咬字，不会翘舌音", enDesc: "Distinct pronunciation with quirky charm" },
+      Bella: { zh: "萌宝", zhDesc: "小萝莉，俏皮可爱", enDesc: "Cute little-girl style voice" },
+      Jennifer: { zh: "詹妮弗", zhDesc: "电影质感美语女声", enDesc: "Premium cinematic American female voice" },
+      Ryan: { zh: "甜茶", zhDesc: "节奏张力强，戏剧感明显", enDesc: "Dynamic and dramatic male delivery" },
+      Katerina: { zh: "卡捷琳娜", zhDesc: "御姐风，韵律感强", enDesc: "Mature, elegant, rhythmic female voice" },
+      Aiden: { zh: "艾登", zhDesc: "美语男声，温暖自然", enDesc: "Natural and warm American male voice" },
+      "Eldric Sage": { zh: "沧明子", zhDesc: "沉稳睿智的长者音色", enDesc: "Calm, wise elder-like male voice" },
+      Mia: { zh: "乖小妹", zhDesc: "温顺轻柔，乖巧甜美", enDesc: "Soft, obedient, sweet young female tone" },
+      Mochi: { zh: "沙小弥", zhDesc: "童真灵动的小大人", enDesc: "Smart childlike voice with lively tone" },
+      Bellona: { zh: "燕铮莺", zhDesc: "洪亮清晰，叙事感染力强", enDesc: "Powerful and clear storyteller voice" },
+      Vincent: { zh: "田叔", zhDesc: "沙哑烟嗓，江湖感浓", enDesc: "Husky and rugged cinematic male voice" },
+      Bunny: { zh: "萌小姬", zhDesc: "萌系小萝莉风格", enDesc: "Adorable moe-style little girl voice" },
+      Neil: { zh: "阿闻", zhDesc: "新闻主持感，字正腔圆", enDesc: "Professional news-anchor style voice" },
+      Elias: { zh: "墨讲师", zhDesc: "讲解型音色，逻辑清晰", enDesc: "Teacher-like voice with clear structure" },
+      Arthur: { zh: "徐大爷", zhDesc: "质朴长者，故事感强", enDesc: "Rustic elder voice with story vibe" },
+      Nini: { zh: "邻家妹妹", zhDesc: "软糯甜美，亲近感强", enDesc: "Sweet, cozy next-door girl tone" },
+      Ebona: { zh: "诡婆婆", zhDesc: "低沉神秘，悬疑氛围", enDesc: "Dark, eerie, mysterious old-woman voice" },
+      Seren: { zh: "小婉", zhDesc: "舒缓助眠，温和放松", enDesc: "Relaxing and soothing bedtime voice" },
+      Pip: { zh: "顽屁小孩", zhDesc: "调皮童声，灵动活泼", enDesc: "Naughty kid-like playful voice" },
+      Stella: { zh: "少女阿月", zhDesc: "甜美少女，情绪对比强", enDesc: "Sweet magical-girl style voice" },
+      Bodega: { zh: "博德加", zhDesc: "热情西班牙大叔", enDesc: "Passionate Spanish uncle-like voice" },
+      Sonrisa: { zh: "索尼莎", zhDesc: "开朗拉美女声", enDesc: "Cheerful Latin female voice" },
+      Alek: { zh: "阿列克", zhDesc: "冷暖并存的俄语男声", enDesc: "Russian male voice with cool warmth" },
+      Dolce: { zh: "多尔切", zhDesc: "慵懒意大利大叔", enDesc: "Laid-back Italian male voice" },
+      Sohee: { zh: "素熙", zhDesc: "温柔开朗，情绪丰富", enDesc: "Warm and expressive Korean female voice" },
+      "Ono Anna": { zh: "小野杏", zhDesc: "鬼灵精怪，青梅竹马感", enDesc: "Mischievous childhood-friend style voice" },
+      Lenn: { zh: "莱恩", zhDesc: "理性青年，德语气质", enDesc: "Rational young German male tone" },
+      Emilien: { zh: "埃米尔安", zhDesc: "浪漫法语男声", enDesc: "Romantic French male voice" },
+      Andre: { zh: "安德雷", zhDesc: "磁性沉稳，自然舒适", enDesc: "Magnetic and stable male voice" },
+      "Radio Gol": { zh: "拉迪奥·戈尔", zhDesc: "足球解说风格，激情外放", enDesc: "Passionate football commentator style" },
+      Jada: { zh: "上海-阿珍", zhDesc: "沪上阿姐风风火火", enDesc: "Energetic Shanghainese female voice" },
+      Dylan: { zh: "北京-晓东", zhDesc: "北京胡同少年感", enDesc: "Beijing-accented youthful male voice" },
+      Li: { zh: "南京-老李", zhDesc: "耐心温和，南京方言特色", enDesc: "Patient Nanjing-accented voice" },
+      Marcus: { zh: "陕西-秦川", zhDesc: "朴实厚重，老陕味道", enDesc: "Grounded Shaanxi-accented male tone" },
+      Roy: { zh: "闽南-阿杰", zhDesc: "市井活泼，闽南风格", enDesc: "Lively Minnan-accented style" },
+      Peter: { zh: "天津-李彼得", zhDesc: "天津相声捧哏风", enDesc: "Tianjin crosstalk partner style" },
+      Sunny: { zh: "四川-晴儿", zhDesc: "甜美川妹子", enDesc: "Sweet Sichuan female voice" },
+      Eric: { zh: "四川-程川", zhDesc: "成都范儿，跳脱自然", enDesc: "Casual Chengdu-flavor male voice" },
+      Rocky: { zh: "粤语-阿强", zhDesc: "幽默风趣，粤语男声", enDesc: "Humorous Cantonese male voice" },
+      Kiki: { zh: "粤语-阿清", zhDesc: "甜美港妹闺蜜风", enDesc: "Sweet Cantonese best-friend style" },
+    };
+
+    const MODE_OPTIONS = ["talk", "listen", "mimic"];
+
+    const I18N = {
+      zh: {
+        identityLabel: "身份（可选已有身份，或上传新图片）",
+        identityPlaceholder: "新身份名称（可选）",
+        chooseImageBtn: "第1步：选择图片",
+        noFileChosen: "未选择文件",
+        langToggleTitle: "Switch to English",
+        uploadIdentity: "第2步：上传并初始化身份",
+        deleteIdentity: "删除",
+        voiceLabel: "音色（Qwen Omni）",
+        modeLabelLeft: "模式",
+        modeTalk: "听说模式（调用大模型）",
+        modeListen: "仅聆听模式（不调用大模型）",
+        modeMimic: "模仿模式（不调用大模型，用户音频驱动说话）",
+        backendOriginLabel: "后端公网地址",
+        backendOriginPlaceholder: "例如 https://xxxx.trycloudflare.com",
+        backendSave: "应用后端地址",
+        backendClear: "清除",
+        backendHintMissing: "当前是静态页面模式，请先填入后端公网地址，再加载身份和开始会话。",
+        backendHintSameOrigin: "当前使用同域后端，不需要额外填写。",
+        backendHintConfigured: "当前后端：{origin}",
+        saveConfig: "保存设置",
+        startSession: "开始实时会话",
+        stopSession: "停止实时会话",
+        mute: "静音播放",
+        unmute: "取消静音",
+        stageTitle: "实时渲染窗口",
+        wsLabel: "WS",
+        wsConnected: "已连接",
+        wsDisconnected: "未连接",
+        bufferFrames: "缓冲帧",
+        stateLabel: "状态",
+        stateIdle: "空闲",
+        modeLlmEnabled: "听说模式",
+        modeListeningOnly: "仅聆听",
+        modeMimicRunning: "模仿模式",
+        currentVoice: "当前音色",
+        statusDisconnected: "未连接",
+        statusConfigSaved: "设置已保存",
+        statusInitIdentity: "后台正在初始化身份，请稍候...",
+        statusIdentityReady: "身份初始化完成",
+        statusInitFailed: "初始化失败",
+        statusConnecting: "正在连接...",
+        statusConnected: "已连接",
+        statusMicFailed: "麦克风初始化失败",
+        statusStopped: "已停止",
+        statusClosed: "连接关闭",
+        statusError: "连接错误",
+        statusStopping: "正在停止...",
+        statusReady: "就绪",
+        statusDeleted: "身份已删除",
+        statusDeleteFailed: "删除失败",
+        statusResourceBusy: "当前资源占用中，请稍等",
+        statusIdentityLoadFailed: "身份切换失败",
+        statusBackendRequired: "请先填写后端公网地址",
+        statusBackendSaved: "后端地址已应用",
+        statusBackendCleared: "已清除后端地址",
+        alertChooseImage: "请先选择一张图片",
+        alertUploadFailed: "上传/初始化失败: {msg}",
+        alertSaveFailed: "保存设置失败: {msg}",
+        alertDeleteFailed: "删除失败: {msg}",
+        alertResourceBusy: "当前资源占用中，请稍等",
+        alertIdentityLoadFailed: "身份切换失败: {msg}",
+        alertStartFailed: "启动失败: {msg}",
+        alertBackendInvalid: "请输入完整后端地址，例如 https://xxxx.trycloudflare.com",
+        confirmDelete1: "确认删除身份「{name}」吗？此操作不可恢复。",
+      },
+      en: {
+        identityLabel: "Identity (select or upload)",
+        identityPlaceholder: "New identity name (optional)",
+        chooseImageBtn: "Step 1: Choose image",
+        noFileChosen: "No file chosen",
+        langToggleTitle: "切换到中文",
+        uploadIdentity: "Step 2: Upload and initialize",
+        deleteIdentity: "Delete",
+        voiceLabel: "Voice (Qwen Omni)",
+        modeLabelLeft: "Mode",
+        modeTalk: "Listening-Speaking mode",
+        modeListen: "Listen-only mode",
+        modeMimic: "Speaking mode",
+        backendOriginLabel: "Backend public URL",
+        backendOriginPlaceholder: "For example https://xxxx.trycloudflare.com",
+        backendSave: "Apply backend",
+        backendClear: "Clear",
+        backendHintMissing: "This is static-page mode. Enter the backend public URL first, then load identities and start a session.",
+        backendHintSameOrigin: "Same-origin backend is active. No extra backend URL is needed.",
+        backendHintConfigured: "Current backend: {origin}",
+        saveConfig: "Save settings",
+        startSession: "Start realtime session",
+        stopSession: "Stop realtime session",
+        mute: "Mute playback",
+        unmute: "Unmute playback",
+        stageTitle: "Realtime render view",
+        wsLabel: "WS",
+        wsConnected: "connected",
+        wsDisconnected: "disconnected",
+        bufferFrames: "Buffer frames",
+        stateLabel: "State",
+        stateIdle: "idle",
+        modeLlmEnabled: "talk",
+        modeListeningOnly: "listen-only",
+        modeMimicRunning: "mimic",
+        currentVoice: "Current voice",
+        statusDisconnected: "Disconnected",
+        statusConfigSaved: "Settings saved",
+        statusInitIdentity: "Initializing identity on server, please wait...",
+        statusIdentityReady: "Identity initialized",
+        statusInitFailed: "Initialization failed",
+        statusConnecting: "Connecting...",
+        statusConnected: "Connected",
+        statusMicFailed: "Microphone initialization failed",
+        statusStopped: "Stopped",
+        statusClosed: "Connection closed",
+        statusError: "Connection error",
+        statusStopping: "Stopping...",
+        statusReady: "Ready",
+        statusDeleted: "Identity deleted",
+        statusDeleteFailed: "Delete failed",
+        statusResourceBusy: "Resources are currently in use, please wait.",
+        statusIdentityLoadFailed: "Failed to switch identity",
+        statusBackendRequired: "Please enter the backend public URL first",
+        statusBackendSaved: "Backend URL applied",
+        statusBackendCleared: "Backend URL cleared",
+        alertChooseImage: "Please choose an image first",
+        alertUploadFailed: "Upload/initialization failed: {msg}",
+        alertSaveFailed: "Failed to save settings: {msg}",
+        alertDeleteFailed: "Delete failed: {msg}",
+        alertResourceBusy: "Resources are currently in use, please wait.",
+        alertIdentityLoadFailed: "Failed to switch identity: {msg}",
+        alertStartFailed: "Failed to start: {msg}",
+        alertBackendInvalid: "Please enter a full backend URL, for example https://xxxx.trycloudflare.com",
+        confirmDelete1: "Delete identity '{name}'? This action cannot be undone.",
+      },
+    };
+
+    function t(key, vars = {}) {
+      const table = I18N[currentLang] || I18N.zh;
+      let raw = table[key] || I18N.zh[key] || key;
+      for (const [k, v] of Object.entries(vars)) {
+        raw = raw.replaceAll(`{${k}}`, String(v));
+      }
+      return raw;
+    }
+
+    function runtimeModeText(modeCode) {
+      if (modeCode === "llm-enabled") return t("modeLlmEnabled");
+      if (modeCode === "listening-only") return t("modeListeningOnly");
+      if (modeCode === "mimic") return t("modeMimicRunning");
+      return t("stateIdle");
+    }
+
+    function renderLangToggle() {
+      const langCode = currentLang === "zh" ? "ZH" : "EN";
+      langToggleBtn.textContent = `🌐 ${langCode}`;
+      langToggleBtn.title = t("langToggleTitle");
+      langToggleBtn.setAttribute("aria-label", t("langToggleTitle"));
+    }
+
+    function renderFilePickerLabel() {
+      const file = identityFileEl.files && identityFileEl.files[0];
+      identityFileBtnEl.textContent = t("chooseImageBtn");
+      identityFileNameEl.textContent = file ? file.name : t("noFileChosen");
+    }
+
+    function hasBackendConnectionConfig() {
+      return !!backendOrigin || !requiresExplicitBackend;
+    }
+
+    function renderBackendOriginControls() {
+      backendOriginLabelEl.textContent = t("backendOriginLabel");
+      backendOriginInputEl.placeholder = t("backendOriginPlaceholder");
+      backendSaveBtnEl.textContent = t("backendSave");
+      backendClearBtnEl.textContent = t("backendClear");
+      backendOriginInputEl.value = backendOrigin || "";
+      if (backendOrigin) {
+        backendOriginHintEl.textContent = t("backendHintConfigured", { origin: backendOrigin });
+      } else if (requiresExplicitBackend) {
+        backendOriginHintEl.textContent = t("backendHintMissing");
+      } else {
+        backendOriginHintEl.textContent = t("backendHintSameOrigin");
+      }
+    }
+
+    function setBackendOrigin(nextOrigin, persist=true) {
+      backendOrigin = normalizeBackendOrigin(nextOrigin);
+      if (persist) {
+        if (backendOrigin) localStorage.setItem(BACKEND_STORAGE_KEY, backendOrigin);
+        else localStorage.removeItem(BACKEND_STORAGE_KEY);
+      }
+      renderBackendOriginControls();
+      updateControls();
+    }
+
+    function renderStats() {
+      const wsState = isRealtimeRunning ? t("wsConnected") : t("wsDisconnected");
+      const modeText = runtimeModeText(runtimeModeCode);
+      statsEl.innerHTML = `
+        <span class="pill">${t("wsLabel")}: ${wsState}</span>
+        <span class="pill">${t("bufferFrames")}: ${statsBufferFrames}</span>
+        <span class="pill">${t("stateLabel")}: ${modeText}</span>
+      `;
+    }
+
+    function renderModeOptions() {
+      const selected = modeSelectEl.value || "talk";
+      modeSelectEl.innerHTML = "";
+      for (const mode of MODE_OPTIONS) {
+        const op = document.createElement("option");
+        op.value = mode;
+        if (mode === "talk") op.textContent = t("modeTalk");
+        else if (mode === "listen") op.textContent = t("modeListen");
+        else op.textContent = t("modeMimic");
+        modeSelectEl.appendChild(op);
+      }
+      modeSelectEl.value = MODE_OPTIONS.includes(selected) ? selected : "talk";
+    }
+
+    function applyLanguage() {
+      if (currentLang !== "zh" && currentLang !== "en") currentLang = "zh";
+      document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
+      renderLangToggle();
+      renderBackendOriginControls();
+      identityLabelEl.textContent = t("identityLabel");
+      identityNameEl.placeholder = t("identityPlaceholder");
+      uploadBtn.textContent = t("uploadIdentity");
+      renderFilePickerLabel();
+      voiceLabelEl.textContent = t("voiceLabel");
+      modeLabelLeftEl.textContent = t("modeLabelLeft");
+      saveConfigBtn.textContent = t("saveConfig");
+      stageTitleEl.textContent = t("stageTitle");
+      renderModeOptions();
+      renderVoiceOptions();
+      renderVoiceHint(voiceSelectEl.value || "");
+      renderIdentityList(identitiesCache);
+      setMuted(isMuted);
+      updateControls();
+      renderStats();
+      if (blockingModalTextEl) {
+        blockingModalTextEl.textContent = t("statusInitIdentity");
+      }
+    }
+
+    function showBlockingModal(text) {
+      if (!blockingModalEl) return;
+      if (blockingModalTextEl) blockingModalTextEl.textContent = text || t("statusInitIdentity");
+      blockingModalEl.classList.add("show");
+    }
+
+    function hideBlockingModal() {
+      if (!blockingModalEl) return;
+      blockingModalEl.classList.remove("show");
+    }
+
+    function setStatus(text, ok=false) {
+      statusEl.textContent = text;
+      statusEl.className = ok ? "status ok" : "status";
+    }
+
+    function updateControls() {
+      const disableConfig = uiBusy || isRealtimeRunning;
+      const backendMissing = !hasBackendConnectionConfig();
+      uploadBtn.disabled = disableConfig || backendMissing;
+      saveConfigBtn.disabled = disableConfig || backendMissing;
+      sessionBtn.disabled = uiBusy || backendMissing;
+      muteBtn.disabled = uiBusy || !isRealtimeRunning;
+      backendOriginInputEl.disabled = disableConfig;
+      backendSaveBtnEl.disabled = disableConfig;
+      backendClearBtnEl.disabled = disableConfig || !backendOrigin;
+      identityNameEl.disabled = disableConfig;
+      identityFileEl.disabled = disableConfig;
+      identityFileBtnEl.disabled = disableConfig;
+      voiceSelectEl.disabled = disableConfig;
+      modeSelectEl.disabled = disableConfig;
+      sessionBtn.textContent = isRealtimeRunning ? t("stopSession") : t("startSession");
+      sessionBtn.className = isRealtimeRunning ? "btn secondary" : "btn primary";
+    }
+
+    function setMuted(v) {
+      isMuted = !!v;
+      if (playbackGainNode) {
+        playbackGainNode.gain.value = isMuted ? 0 : 1;
+      }
+      muteBtn.textContent = isMuted ? t("unmute") : t("mute");
+    }
+
+    function setBusy(b) {
+      uiBusy = b;
+      updateControls();
+    }
+
+    function setRealtimeRunning(v) {
+      isRealtimeRunning = v;
+      if (!isRealtimeRunning) {
+        runtimeModeCode = "idle";
+        statsBufferFrames = "-";
+      }
+      updateControls();
+      renderStats();
+    }
+
+    async function initializeAppData() {
+      if (!hasBackendConnectionConfig()) {
+        identitiesCache = [];
+        voicesCache = [];
+        selectedIdentityId = "";
+        renderIdentityList(identitiesCache);
+        renderVoiceOptions();
+        renderVoiceHint(voiceSelectEl.value || "");
+        updateControls();
+        renderStats();
+        setStatus(t("statusBackendRequired"), false);
+        return;
+      }
+
+      try {
+        await refreshVoices();
+        await refreshSessionConfig();
+        await refreshIdentities();
+        setMuted(false);
+        updateControls();
+        renderStats();
+        setStatus(t("statusReady"), true);
+      } catch (e) {
+        setStatus(t("statusInitFailed"), false);
+      }
+    }
+
+    async function applyBackendOriginFromInput() {
+      const raw = backendOriginInputEl.value || "";
+      if (raw.trim() && !normalizeBackendOrigin(raw)) {
+        alert(t("alertBackendInvalid"));
+        return;
+      }
+      setBackendOrigin(raw, true);
+      setStatus(backendOrigin ? t("statusBackendSaved") : t("statusBackendCleared"), !!backendOrigin);
+      await initializeAppData();
+    }
+
+    function voiceLabel(voice) {
+      const meta = VOICE_META[voice];
+      if (!meta) return voice;
+      if (currentLang === "en") {
+        return `${voice} - ${meta.enDesc}`;
+      }
+      return `${meta.zh} - ${meta.zhDesc}`;
+    }
+
+    function renderVoiceHint(voice) {
+      const meta = VOICE_META[voice];
+      if (!meta) {
+        voiceHintEl.textContent = `${t("currentVoice")}: ${voice}`;
+        return;
+      }
+      if (currentLang === "en") {
+        voiceHintEl.textContent = `${t("currentVoice")}: ${voice}\n${meta.enDesc}`;
+      } else {
+        voiceHintEl.textContent = `${t("currentVoice")}: ${meta.zh}\n${meta.zhDesc}`;
+      }
+    }
+
+    function renderVoiceOptions() {
+      const previous = voiceSelectEl.value;
+      voiceSelectEl.innerHTML = "";
+      for (const v of voicesCache) {
+        const op = document.createElement("option");
+        op.value = v;
+        op.textContent = voiceLabel(v);
+        voiceSelectEl.appendChild(op);
+      }
+      if (previous && voicesCache.includes(previous)) {
+        voiceSelectEl.value = previous;
+      }
+    }
+
+    function stopAudioPipeline() {
+      if (processor) {
+        processor.onaudioprocess = null;
+        processor.disconnect();
+        processor = null;
+      }
+      if (source) {
+        source.disconnect();
+        source = null;
+      }
+      if (mediaStream) {
+        for (const track of mediaStream.getTracks()) {
+          track.stop();
+        }
+        mediaStream = null;
+      }
+      if (audioContext) {
+        audioContext.close().catch(() => {});
+        audioContext = null;
+      }
+      playbackGainNode = null;
+      setMuted(false);
+    }
+
+    function int16FromFloat32(float32) {
+      const out = new Int16Array(float32.length);
+      for (let i = 0; i < float32.length; i++) {
+        let s = Math.max(-1, Math.min(1, float32[i]));
+        out[i] = s < 0 ? s * 32768 : s * 32767;
+      }
+      return out;
+    }
+
+    function downsampleBuffer(buffer, inRate, outRate) {
+      if (outRate === inRate) return buffer;
+      const ratio = inRate / outRate;
+      const newLen = Math.round(buffer.length / ratio);
+      const out = new Float32Array(newLen);
+      let offset = 0;
+      for (let i = 0; i < newLen; i++) {
+        const next = Math.round((i + 1) * ratio);
+        let acc = 0;
+        let count = 0;
+        for (let j = offset; j < next && j < buffer.length; j++) {
+          acc += buffer[j]; count++;
+        }
+        out[i] = count ? acc / count : 0;
+        offset = next;
+      }
+      return out;
+    }
+
+    async function fetchJSON(url, options={}) {
+      const res = await fetch(resolveBackendUrl(url), options);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `HTTP ${res.status}`);
+      }
+      return await res.json();
+    }
+
+    function renderIdentityList(identities) {
+      identityListEl.innerHTML = "";
+      for (const id of identities) {
+        const item = document.createElement("div");
+        item.className = "identity-item" + (id.identity_id === selectedIdentityId ? " active" : "");
+        item.innerHTML = `
+          <img src="${resolveBackendImageUrl(id.image_url)}" alt="${id.name || id.identity_id}" />
+          <div>
+            <div class="name">${id.name || id.identity_id}</div>
+            <div style="font-size:12px;color:#6b7280;">${id.identity_id}</div>
+          </div>
+          <button class="identity-delete" type="button">${t("deleteIdentity")}</button>
+        `;
+        item.onclick = () => {
+          if (isRealtimeRunning || uiBusy) return;
+          selectedIdentityId = id.identity_id;
+          renderIdentityList(identities);
+        };
+        const delBtn = item.querySelector(".identity-delete");
+        delBtn.onclick = async (e) => {
+          e.stopPropagation();
+          await deleteIdentity(id.identity_id, id.name || id.identity_id);
+        };
+        identityListEl.appendChild(item);
+      }
+    }
+
+    async function deleteIdentity(identityId, displayName) {
+      if (isRealtimeRunning || uiBusy) return;
+      if (!confirm(t("confirmDelete1", { name: displayName }))) return;
+
+      setBusy(true);
+      try {
+        const res = await fetch(resolveBackendUrl(`/api/identities/${encodeURIComponent(identityId)}`), {
+          method: "DELETE",
+        });
+        if (!res.ok) throw new Error(await res.text());
+
+        if (selectedIdentityId === identityId) {
+          selectedIdentityId = "";
+          await saveSessionConfig();
+        }
+        await refreshIdentities();
+        setStatus(t("statusDeleted"), true);
+      } catch (e) {
+        alert(t("alertDeleteFailed", { msg: e.message || e }));
+        setStatus(t("statusDeleteFailed"), false);
+      } finally {
+        setBusy(false);
+      }
+    }
+
+    async function refreshIdentities() {
+      const data = await fetchJSON("/api/identities");
+      identitiesCache = data.identities || [];
+      renderIdentityList(identitiesCache);
+    }
+
+    async function refreshVoices() {
+      const data = await fetchJSON("/api/voices");
+      voicesCache = data.voices || [];
+      renderVoiceOptions();
+      renderVoiceHint(voiceSelectEl.value || "");
+    }
+
+    async function refreshSessionConfig() {
+      const cfg = await fetchJSON("/api/session/config");
+      selectedIdentityId = cfg.identity_id || "";
+      if (cfg.voice) voiceSelectEl.value = cfg.voice;
+      if (cfg.mode) modeSelectEl.value = cfg.mode;
+      renderVoiceHint(voiceSelectEl.value || "");
+    }
+
+    async function saveSessionConfig() {
+      await fetchJSON("/api/session/config", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          identity_id: selectedIdentityId,
+          voice: voiceSelectEl.value,
+          mode: modeSelectEl.value,
+        }),
+      });
+      setStatus(t("statusConfigSaved"), true);
+    }
+
+    async function fetchRuntimeStatus() {
+      return await fetchJSON("/api/session/runtime-status");
+    }
+
+    async function uploadIdentity() {
+      const file = identityFileEl.files[0];
+      if (!file) {
+        alert(t("alertChooseImage"));
+        return;
+      }
+      showBlockingModal(t("statusInitIdentity"));
+      setBusy(true);
+      try {
+        const fd = new FormData();
+        fd.append("image", file);
+        fd.append("name", identityNameEl.value || "");
+        const res = await fetch(resolveBackendUrl("/api/identities/upload"), { method: "POST", body: fd });
+        if (!res.ok) throw new Error(await res.text());
+        const data = await res.json();
+        selectedIdentityId = data.identity.identity_id;
+        identityFileEl.value = "";
+        renderFilePickerLabel();
+        await refreshIdentities();
+        await saveSessionConfig();
+        setStatus(t("statusIdentityReady"), true);
+      } catch (e) {
+        alert(t("alertUploadFailed", { msg: e.message || e }));
+        setStatus(t("statusInitFailed"), false);
+      } finally {
+        hideBlockingModal();
+        setBusy(false);
+      }
+    }
+
+    async function startRealtime() {
+      if (isRealtimeRunning || uiBusy) return;
+      setBusy(true);
+      setStatus(t("statusConnecting"), false);
+      try {
+        const runtime = await fetchRuntimeStatus();
+        if (runtime.busy) {
+          setStatus(t("statusResourceBusy"), false);
+          setBusy(false);
+          alert(t("alertResourceBusy"));
+          return;
+        }
+
+        await saveSessionConfig();
+
+        const socket = new WebSocket(resolveBackendWebSocketUrl("/ws"));
+        ws = socket;
+        socket.binaryType = "arraybuffer";
+        let sessionRejected = false;
+
+        socket.onopen = async () => {
+          try {
+            mediaStream = await navigator.mediaDevices.getUserMedia({
+              audio: {
+                echoCancellation: true,
+                noiseSuppression: true,
+                autoGainControl: true,
+              },
+            });
+            if (sessionRejected || ws !== socket || socket.readyState !== WebSocket.OPEN) {
+              stopAudioPipeline();
+              return;
+            }
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            playbackGainNode = audioContext.createGain();
+            playbackGainNode.gain.value = isMuted ? 0 : 1;
+            playbackGainNode.connect(audioContext.destination);
+            audioPlayCursorSec = audioContext.currentTime + 0.08;
+
+            source = audioContext.createMediaStreamSource(mediaStream);
+            processor = audioContext.createScriptProcessor(2048, 1, 1);
+            processor.onaudioprocess = (e) => {
+              if (sessionRejected || ws !== socket || socket.readyState !== WebSocket.OPEN || !audioContext) return;
+              const input = e.inputBuffer.getChannelData(0);
+              const mono16k = downsampleBuffer(input, audioContext.sampleRate, 16000);
+              const i16 = int16FromFloat32(mono16k);
+              socket.send(i16.buffer);
+            };
+            source.connect(processor);
+            processor.connect(audioContext.destination);
+            setRealtimeRunning(true);
+            setStatus(t("statusConnected"), true);
+          } catch (e) {
+            if (!sessionRejected) {
+              setStatus(t("statusMicFailed"), false);
+            }
+            try { socket.close(); } catch (_) {}
+          } finally {
+            if (ws === socket) {
+              setBusy(false);
+            }
+          }
+        };
+
+        socket.onmessage = (event) => {
+          if (ws !== socket) return;
+          if (typeof event.data === "string") {
+            try {
+              const meta = JSON.parse(event.data);
+              if (meta.type === "busy") {
+                sessionRejected = true;
+                stopAudioPipeline();
+                setStatus(t("statusResourceBusy"), false);
+                alert(t("alertResourceBusy"));
+                try { socket.close(); } catch (_) {}
+                return;
+              }
+              if (meta.type === "error") {
+                sessionRejected = true;
+                stopAudioPipeline();
+                if (meta.code === "identity_load_failed") {
+                  setStatus(t("statusIdentityLoadFailed"), false);
+                  alert(t("alertIdentityLoadFailed", { msg: meta.detail || "-" }));
+                } else {
+                  setStatus(t("statusError"), false);
+                  alert(t("alertStartFailed", { msg: meta.detail || meta.code || "unknown" }));
+                }
+                try { socket.close(); } catch (_) {}
+                return;
+              }
+              if (meta.type === "init") {
+                llmAudioSampleRate = meta.audio_sample_rate || 16000;
+                return;
+              }
+              if (meta.type === "stats") {
+                statsBufferFrames = String(meta.buffer_frames ?? "-");
+                runtimeModeCode = String(meta.mode || "idle");
+                renderStats();
+              }
+            } catch (_) {}
+            return;
+          }
+
+          if (sessionRejected || !audioContext) return;
+          const bytes = new Uint8Array(event.data);
+          const msgType = bytes[0];
+          if (msgType !== 3) return;
+
+          const dv = new DataView(event.data);
+          const audioLen = dv.getUint32(9, true);
+          const frameLen = dv.getUint32(13, true);
+          const audioStart = 17;
+          const audioEnd = audioStart + audioLen;
+          const frameEnd = audioEnd + frameLen;
+          if (frameEnd > bytes.length) return;
+
+          const audioBytes = event.data.slice(audioStart, audioEnd);
+          const pcm = new Int16Array(audioBytes);
+          let frameDelayMs = 0;
+          if (pcm.length > 0) {
+            const f32 = new Float32Array(pcm.length);
+            for (let i = 0; i < pcm.length; i++) f32[i] = pcm[i] / 32768.0;
+            const buf = audioContext.createBuffer(1, f32.length, llmAudioSampleRate);
+            buf.copyToChannel(f32, 0, 0);
+            const srcNode = audioContext.createBufferSource();
+            srcNode.buffer = buf;
+            srcNode.connect(playbackGainNode || audioContext.destination);
+            const nowSec = audioContext.currentTime;
+            if (audioPlayCursorSec < nowSec + 0.03) {
+              audioPlayCursorSec = nowSec + 0.03;
+            }
+            const packetStartSec = audioPlayCursorSec;
+            srcNode.start(packetStartSec);
+            frameDelayMs = Math.max(0, (packetStartSec - nowSec) * 1000.0);
+            audioPlayCursorSec += buf.duration;
+          }
+
+          const jpeg = bytes.slice(audioEnd, frameEnd);
+          const blob = new Blob([jpeg], { type: "image/jpeg" });
+          const url = URL.createObjectURL(blob);
+          const img = new Image();
+          img.onload = () => {
+            setTimeout(() => {
+              ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+              URL.revokeObjectURL(url);
+            }, frameDelayMs);
+          };
+          img.src = url;
+        };
+
+        socket.onclose = () => {
+          if (ws !== socket) return;
+          stopAudioPipeline();
+          const byUser = manualStopping;
+          const rejected = sessionRejected;
+          manualStopping = false;
+          setRealtimeRunning(false);
+          setBusy(false);
+          if (!rejected) {
+            setStatus(byUser ? t("statusStopped") : t("statusClosed"), byUser);
+          }
+          ws = null;
+        };
+        socket.onerror = () => {
+          if (ws !== socket) return;
+          setStatus(t("statusError"), false);
+        };
+      } catch (e) {
+        alert(t("alertStartFailed", { msg: e.message || e }));
+        setBusy(false);
+      }
+    }
+
+    function stopRealtime() {
+      if (!ws) return;
+      manualStopping = true;
+      setStatus(t("statusStopping"), false);
+      if (ws.readyState === WebSocket.OPEN || ws.readyState === WebSocket.CONNECTING) {
+        ws.close();
+      }
+    }
+
+    function closeRealtimeForPageExit() {
+      if (!ws) return;
+      try {
+        ws.close();
+      } catch (_) {}
+      stopAudioPipeline();
+      ws = null;
+    }
+
+    uploadBtn.addEventListener("click", uploadIdentity);
+    saveConfigBtn.addEventListener("click", async () => {
+      try {
+        await saveSessionConfig();
+      } catch (e) {
+        alert(t("alertSaveFailed", { msg: e.message || e }));
+      }
+    });
+    sessionBtn.addEventListener("click", () => {
+      if (isRealtimeRunning) stopRealtime();
+      else startRealtime();
+    });
+    muteBtn.addEventListener("click", () => {
+      if (!isRealtimeRunning) return;
+      setMuted(!isMuted);
+    });
+    identityFileBtnEl.addEventListener("click", () => {
+      if (identityFileBtnEl.disabled) return;
+      identityFileEl.click();
+    });
+    identityFileEl.addEventListener("change", () => {
+      renderFilePickerLabel();
+    });
+    voiceSelectEl.addEventListener("change", () => {
+      renderVoiceHint(voiceSelectEl.value || "");
+    });
+    backendSaveBtnEl.addEventListener("click", async () => {
+      await applyBackendOriginFromInput();
+    });
+    backendClearBtnEl.addEventListener("click", async () => {
+      backendOriginInputEl.value = "";
+      await applyBackendOriginFromInput();
+    });
+    langToggleBtn.addEventListener("click", () => {
+      currentLang = currentLang === "zh" ? "en" : "zh";
+      localStorage.setItem("demo_lang", currentLang);
+      applyLanguage();
+    });
+    window.addEventListener("pagehide", closeRealtimeForPageExit);
+    window.addEventListener("beforeunload", closeRealtimeForPageExit);
+
+    applyLanguage();
+
+    (async () => {
+      await initializeAppData();
+    })();
+  </script>
+</body>
+</html>
