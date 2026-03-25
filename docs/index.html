@@ -468,16 +468,6 @@
 
       <div class="settings-body">
         <div class="group">
-        <label id="backendOriginLabel">后端公网地址</label>
-        <input id="backendOriginInput" type="text" placeholder="例如 https://xxxx.trycloudflare.com" />
-        <div id="backendOriginHint" class="voice-hint">-</div>
-        <div class="btn-row">
-          <button id="backendSaveBtn" class="btn secondary" type="button">应用后端地址</button>
-          <button id="backendClearBtn" class="btn secondary" type="button">清除</button>
-        </div>
-        </div>
-
-        <div class="group">
         <label id="identityLabel">身份（选择已有身份，或上传新图片）</label>
         <div class="identity-list" id="identityList"></div>
         <input id="identityName" type="text" placeholder="新身份名称（可选）" />
@@ -551,11 +541,6 @@
     const uploadBtn = document.getElementById("uploadBtn");
     const muteBtn = document.getElementById("muteBtn");
     const langToggleBtn = document.getElementById("langToggleBtn");
-    const backendOriginLabelEl = document.getElementById("backendOriginLabel");
-    const backendOriginInputEl = document.getElementById("backendOriginInput");
-    const backendOriginHintEl = document.getElementById("backendOriginHint");
-    const backendSaveBtnEl = document.getElementById("backendSaveBtn");
-    const backendClearBtnEl = document.getElementById("backendClearBtn");
     const identityLabelEl = document.getElementById("identityLabel");
     const voiceLabelEl = document.getElementById("voiceLabel");
     const modeLabelLeftEl = document.getElementById("modeLabelLeft");
@@ -713,13 +698,6 @@
         modeTalk: "听说模式（调用大模型）",
         modeListen: "仅聆听模式（不调用大模型）",
         modeMimic: "模仿模式（不调用大模型，用户音频驱动说话）",
-        backendOriginLabel: "后端公网地址",
-        backendOriginPlaceholder: "例如 https://xxxx.trycloudflare.com",
-        backendSave: "应用后端地址",
-        backendClear: "清除",
-        backendHintMissing: "当前是静态页面模式，请先填入后端公网地址，再加载身份和开始会话。",
-        backendHintSameOrigin: "当前使用同域后端，不需要额外填写。",
-        backendHintConfigured: "当前后端：{origin}",
         saveConfig: "保存设置",
         startSession: "开始实时会话",
         stopSession: "停止实时会话",
@@ -753,9 +731,7 @@
         statusDeleteFailed: "删除失败",
         statusResourceBusy: "当前资源占用中，请稍等",
         statusIdentityLoadFailed: "身份切换失败",
-        statusBackendRequired: "请先填写后端公网地址",
-        statusBackendSaved: "后端地址已应用",
-        statusBackendCleared: "已清除后端地址",
+        statusBackendRequired: "请使用 ?backend=https://xxxx.trycloudflare.com 的方式打开当前页面",
         alertChooseImage: "请先选择一张图片",
         alertUploadFailed: "上传/初始化失败: {msg}",
         alertSaveFailed: "保存设置失败: {msg}",
@@ -779,13 +755,6 @@
         modeTalk: "Listening-Speaking mode",
         modeListen: "Listen-only mode",
         modeMimic: "Speaking mode",
-        backendOriginLabel: "Backend public URL",
-        backendOriginPlaceholder: "For example https://xxxx.trycloudflare.com",
-        backendSave: "Apply backend",
-        backendClear: "Clear",
-        backendHintMissing: "This is static-page mode. Enter the backend public URL first, then load identities and start a session.",
-        backendHintSameOrigin: "Same-origin backend is active. No extra backend URL is needed.",
-        backendHintConfigured: "Current backend: {origin}",
         saveConfig: "Save settings",
         startSession: "Start realtime session",
         stopSession: "Stop realtime session",
@@ -819,9 +788,7 @@
         statusDeleteFailed: "Delete failed",
         statusResourceBusy: "Resources are currently in use, please wait.",
         statusIdentityLoadFailed: "Failed to switch identity",
-        statusBackendRequired: "Please enter the backend public URL first",
-        statusBackendSaved: "Backend URL applied",
-        statusBackendCleared: "Backend URL cleared",
+        statusBackendRequired: "Open this page with ?backend=https://xxxx.trycloudflare.com first",
         alertChooseImage: "Please choose an image first",
         alertUploadFailed: "Upload/initialization failed: {msg}",
         alertSaveFailed: "Failed to save settings: {msg}",
@@ -867,31 +834,6 @@
       return !!backendOrigin || !requiresExplicitBackend;
     }
 
-    function renderBackendOriginControls() {
-      backendOriginLabelEl.textContent = t("backendOriginLabel");
-      backendOriginInputEl.placeholder = t("backendOriginPlaceholder");
-      backendSaveBtnEl.textContent = t("backendSave");
-      backendClearBtnEl.textContent = t("backendClear");
-      backendOriginInputEl.value = backendOrigin || "";
-      if (backendOrigin) {
-        backendOriginHintEl.textContent = t("backendHintConfigured", { origin: backendOrigin });
-      } else if (requiresExplicitBackend) {
-        backendOriginHintEl.textContent = t("backendHintMissing");
-      } else {
-        backendOriginHintEl.textContent = t("backendHintSameOrigin");
-      }
-    }
-
-    function setBackendOrigin(nextOrigin, persist=true) {
-      backendOrigin = normalizeBackendOrigin(nextOrigin);
-      if (persist) {
-        if (backendOrigin) localStorage.setItem(BACKEND_STORAGE_KEY, backendOrigin);
-        else localStorage.removeItem(BACKEND_STORAGE_KEY);
-      }
-      renderBackendOriginControls();
-      updateControls();
-    }
-
     function renderStats() {
       const wsState = isRealtimeRunning ? t("wsConnected") : t("wsDisconnected");
       const modeText = runtimeModeText(runtimeModeCode);
@@ -920,7 +862,6 @@
       if (currentLang !== "zh" && currentLang !== "en") currentLang = "zh";
       document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
       renderLangToggle();
-      renderBackendOriginControls();
       identityLabelEl.textContent = t("identityLabel");
       identityNameEl.placeholder = t("identityPlaceholder");
       uploadBtn.textContent = t("uploadIdentity");
@@ -964,9 +905,6 @@
       saveConfigBtn.disabled = disableConfig || backendMissing;
       sessionBtn.disabled = uiBusy || backendMissing;
       muteBtn.disabled = uiBusy || !isRealtimeRunning;
-      backendOriginInputEl.disabled = disableConfig;
-      backendSaveBtnEl.disabled = disableConfig;
-      backendClearBtnEl.disabled = disableConfig || !backendOrigin;
       identityNameEl.disabled = disableConfig;
       identityFileEl.disabled = disableConfig;
       identityFileBtnEl.disabled = disableConfig;
@@ -1024,17 +962,6 @@
       } catch (e) {
         setStatus(t("statusInitFailed"), false);
       }
-    }
-
-    async function applyBackendOriginFromInput() {
-      const raw = backendOriginInputEl.value || "";
-      if (raw.trim() && !normalizeBackendOrigin(raw)) {
-        alert(t("alertBackendInvalid"));
-        return;
-      }
-      setBackendOrigin(raw, true);
-      setStatus(backendOrigin ? t("statusBackendSaved") : t("statusBackendCleared"), !!backendOrigin);
-      await initializeAppData();
     }
 
     function voiceLabel(voice) {
@@ -1470,13 +1397,6 @@
     });
     voiceSelectEl.addEventListener("change", () => {
       renderVoiceHint(voiceSelectEl.value || "");
-    });
-    backendSaveBtnEl.addEventListener("click", async () => {
-      await applyBackendOriginFromInput();
-    });
-    backendClearBtnEl.addEventListener("click", async () => {
-      backendOriginInputEl.value = "";
-      await applyBackendOriginFromInput();
     });
     langToggleBtn.addEventListener("click", () => {
       currentLang = currentLang === "zh" ? "en" : "zh";
