@@ -579,7 +579,6 @@
     let runtimeModeCode = "idle";
     let statsBufferFrames = "-";
 
-    const BACKEND_STORAGE_KEY = "demo_backend_origin";
     const requiresExplicitBackend = location.hostname.endsWith("github.io");
 
     function normalizeBackendOrigin(value) {
@@ -595,13 +594,7 @@
     function resolveBackendOrigin() {
       const params = new URLSearchParams(location.search);
       const queryValue = normalizeBackendOrigin(params.get("backend") || "");
-      if (queryValue) {
-        localStorage.setItem(BACKEND_STORAGE_KEY, queryValue);
-        return queryValue;
-      }
-
-      const storedValue = normalizeBackendOrigin(localStorage.getItem(BACKEND_STORAGE_KEY) || "");
-      if (storedValue) return storedValue;
+      if (queryValue) return queryValue;
 
       const configValue = normalizeBackendOrigin(window.__DEMO_BACKEND_ORIGIN__ || "");
       if (configValue) return configValue;
@@ -1055,39 +1048,14 @@
       return out;
     }
 
-    function sleep(ms) {
-      return new Promise((resolve) => setTimeout(resolve, ms));
-    }
-
     async function fetchJSON(url, options={}) {
       const requestUrl = resolveBackendUrl(url);
-      const method = String(options.method || "GET").toUpperCase();
-      const attempts = method === "GET" ? 3 : 1;
-      let lastError = null;
-
-      for (let attempt = 0; attempt < attempts; attempt++) {
-        const controller = new AbortController();
-        const timeoutId = setTimeout(() => controller.abort(), 8000);
-        try {
-          const res = await fetch(requestUrl, {
-            ...options,
-            signal: controller.signal,
-          });
-          if (!res.ok) {
-            const text = await res.text();
-            throw new Error(text || `HTTP ${res.status}`);
-          }
-          return await res.json();
-        } catch (err) {
-          lastError = err;
-          if (attempt + 1 >= attempts) break;
-          await sleep(400 * (attempt + 1));
-        } finally {
-          clearTimeout(timeoutId);
-        }
+      const res = await fetch(requestUrl, options);
+      if (!res.ok) {
+        const text = await res.text();
+        throw new Error(text || `HTTP ${res.status}`);
       }
-
-      throw lastError || new Error("Request failed");
+      return await res.json();
     }
 
     function syncIdentitySelection() {
