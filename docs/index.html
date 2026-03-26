@@ -1090,13 +1090,22 @@
       throw lastError || new Error("Request failed");
     }
 
+    function syncIdentitySelection() {
+      const items = identityListEl.querySelectorAll(".identity-item");
+      for (const item of items) {
+        const identityId = item.getAttribute("data-identity-id") || "";
+        item.classList.toggle("active", identityId === selectedIdentityId);
+      }
+    }
+
     function renderIdentityList(identities) {
       identityListEl.innerHTML = "";
       for (const id of identities) {
         const item = document.createElement("div");
+        item.setAttribute("data-identity-id", id.identity_id || "");
         item.className = "identity-item" + (id.identity_id === selectedIdentityId ? " active" : "");
         item.innerHTML = `
-          <img src="${resolveBackendImageUrl(id.image_url)}" alt="${id.name || id.identity_id}" />
+          <img src="${resolveBackendImageUrl(id.image_url)}" alt="${id.name || id.identity_id}" loading="lazy" decoding="async" />
           <div>
             <div class="name">${id.name || id.identity_id}</div>
             <div style="font-size:12px;color:#6b7280;">${id.identity_id}</div>
@@ -1105,8 +1114,9 @@
         `;
         item.onclick = () => {
           if (isRealtimeRunning || uiBusy) return;
+          if (selectedIdentityId === id.identity_id) return;
           selectedIdentityId = id.identity_id;
-          renderIdentityList(identities);
+          syncIdentitySelection();
         };
         const delBtn = item.querySelector(".identity-delete");
         delBtn.onclick = async (e) => {
