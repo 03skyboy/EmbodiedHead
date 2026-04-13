@@ -3,112 +3,214 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>EmbodiedHead Live Demo</title>
-  <link rel="stylesheet" href="static/styles.css?v=20260410-1" />
+  <title>EmbodiedHead Project Page</title>
+  <link rel="stylesheet" href="static/styles.css?v=20260413-2" />
+  <link rel="stylesheet" href="static/project-page.css?v=20260413-2" />
 </head>
-<body>
-  <div class="shell">
-    <aside class="panel settings">
-      <div class="settings-top">
-        <div class="title">
-          <h1>EmbodiedHead</h1>
-          <div class="title-actions">
-            <button id="selfTestOpenBtn" class="utility-btn" type="button" aria-haspopup="dialog" aria-expanded="false">设备自检</button>
-            <button id="langToggleBtn" class="lang-toggle" type="button">🌐</button>
-          </div>
+<body class="project-page">
+  <main class="project-page-shell">
+    <section class="project-hero">
+      <div class="project-hero-copy">
+        <div class="project-kicker">Project Page</div>
+        <h1 class="project-title">EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents</h1>
+        <div class="project-authors">
+          <span>Yu Zhang<sup>1*</sup></span>
+          <span>Kaiyuan Shen<sup>1*</sup></span>
+          <span>Yang Li<sup>1†</sup></span>
+        </div>
+        <div class="project-affiliation">
+          <span><sup>1</sup>School of Computer Science and Technology, East China Normal University, Shanghai, China</span>
+        </div>
+        <div class="project-notes">
+          <span>* Equal contribution.</span>
+          <span>† Corresponding author.</span>
+        </div>
+        <div class="project-links">
+          <a class="project-link" href="assets/EmbodiedHead.pdf" target="_blank" rel="noreferrer">Paper PDF</a>
+          <a class="project-link is-disabled" href="#arxiv-pending" aria-disabled="true">arXiv Pending</a>
         </div>
       </div>
+      <div class="project-hero-media">
+        <img src="assets/embodiedhead-head-pic.png" alt="EmbodiedHead teaser figure" />
+      </div>
+    </section>
 
-      <div class="settings-body">
-        <div class="group">
-          <label id="identityLabel">身份（选择已有身份，或上传新图片）</label>
-          <div class="identity-list" id="identityList"></div>
-          <input id="identityName" type="text" placeholder="新身份名称（可选）" />
-          <input id="identityFile" type="file" accept="image/png,image/jpeg" hidden />
-          <div class="file-row">
-            <button id="identityFileBtn" class="btn secondary" type="button">第1步：选择图片</button>
-            <span id="identityFileName" class="file-name">未选择文件</span>
-          </div>
-          <div id="identityFormatsNote" class="upload-format-note">支持 JPG / JPEG / PNG</div>
-          <div class="btn-row">
-            <button id="uploadBtn" class="btn upload-action">第2步：上传并初始化身份</button>
-          </div>
-        </div>
+    <section class="project-section project-demo-section">
+      <div class="section-intro">
+        <div class="section-eyebrow">Interactive Demo</div>
+        <h2>Talk to EmbodiedHead in Your Browser</h2>
+        <p>
+          This is the same interactive demo module used by the live service backend. You can upload an identity,
+          select the model and voice, switch modes, and launch the real-time listening-speaking avatar directly from this page.
+        </p>
+      </div>
 
-        <div class="group">
-          <label id="modelLabel">大模型</label>
-          <div class="picker">
-            <button id="modelPickerBtn" class="picker-trigger" type="button" aria-haspopup="dialog" aria-expanded="false">
-              <span class="picker-trigger-main">
-                <span id="modelPickerTitle" class="picker-trigger-title">-</span>
-                <span id="modelPickerMeta" class="picker-trigger-meta">-</span>
-              </span>
-              <span class="picker-caret" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
-              </span>
-            </button>
-          </div>
-        </div>
+      <div class="demo-showcase">
+        <div class="shell">
+          <aside class="panel settings">
+            <div class="settings-top">
+              <div class="title">
+                <h1>EmbodiedHead</h1>
+                <div class="title-actions">
+                  <button id="selfTestOpenBtn" class="utility-btn" type="button" aria-haspopup="dialog" aria-expanded="false">设备自检</button>
+                  <button id="langToggleBtn" class="lang-toggle" type="button">🌐</button>
+                </div>
+              </div>
+            </div>
 
-        <div class="group">
-          <label id="voiceLabel">音色</label>
-          <div class="picker">
-            <button id="voicePickerBtn" class="picker-trigger" type="button" aria-haspopup="dialog" aria-expanded="false">
-              <span class="picker-trigger-main">
-                <span id="voicePickerTitle" class="picker-trigger-title">-</span>
-                <span id="voicePickerMeta" class="picker-trigger-meta">-</span>
-              </span>
-              <span class="picker-caret" aria-hidden="true">
-                <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
-              </span>
-            </button>
-          </div>
-        </div>
+            <div class="settings-body">
+              <div class="group">
+                <label id="identityLabel">身份（选择已有身份，或上传新图片）</label>
+                <div class="identity-list" id="identityList"></div>
+                <input id="identityName" type="text" placeholder="新身份名称（可选）" />
+                <input id="identityFile" type="file" accept="image/png,image/jpeg" hidden />
+                <div class="file-row">
+                  <button id="identityFileBtn" class="btn secondary" type="button">第1步：选择图片</button>
+                  <span id="identityFileName" class="file-name">未选择文件</span>
+                </div>
+                <div id="identityFormatsNote" class="upload-format-note">支持 JPG / JPEG / PNG</div>
+                <div class="btn-row">
+                  <button id="uploadBtn" class="btn upload-action">第2步：上传并初始化身份</button>
+                </div>
+              </div>
 
-        <div class="group">
-          <label id="modeLabelLeft">模式</label>
-          <div id="modeSegmented" class="mode-segmented"></div>
+              <div class="group">
+                <label id="modelLabel">大模型</label>
+                <div class="picker">
+                  <button id="modelPickerBtn" class="picker-trigger" type="button" aria-haspopup="dialog" aria-expanded="false">
+                    <span class="picker-trigger-main">
+                      <span id="modelPickerTitle" class="picker-trigger-title">-</span>
+                      <span id="modelPickerMeta" class="picker-trigger-meta">-</span>
+                    </span>
+                    <span class="picker-caret" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="group">
+                <label id="voiceLabel">音色</label>
+                <div class="picker">
+                  <button id="voicePickerBtn" class="picker-trigger" type="button" aria-haspopup="dialog" aria-expanded="false">
+                    <span class="picker-trigger-main">
+                      <span id="voicePickerTitle" class="picker-trigger-title">-</span>
+                      <span id="voicePickerMeta" class="picker-trigger-meta">-</span>
+                    </span>
+                    <span class="picker-caret" aria-hidden="true">
+                      <svg viewBox="0 0 24 24"><path d="m6 9 6 6 6-6"></path></svg>
+                    </span>
+                  </button>
+                </div>
+              </div>
+
+              <div class="group">
+                <label id="modeLabelLeft">模式</label>
+                <div id="modeSegmented" class="mode-segmented"></div>
+              </div>
+            </div>
+          </aside>
+
+          <main class="panel stage">
+            <div class="stage-head">
+              <span id="stageTitle">实时渲染窗口</span>
+              <div id="status" class="status stage-status" data-level="neutral" aria-live="polite">
+                <span class="status-dot" aria-hidden="true"></span>
+                <span class="status-text">未连接</span>
+              </div>
+            </div>
+            <div class="video-wrap">
+              <canvas id="canvas" width="512" height="512"></canvas>
+            </div>
+            <div class="stage-foot">
+              <div class="stats" id="stats">
+                <span class="pill">WS: -</span>
+                <span class="pill">缓冲帧: -</span>
+                <span class="pill">状态: idle</span>
+              </div>
+              <div class="stage-actions">
+                <div class="stage-audio-icons" aria-label="Audio levels">
+                  <button id="stageMicMeter" class="stage-audio-icon-meter" type="button" aria-label="麦克风 0%" title="麦克风 0%">
+                    <span class="stage-audio-icon mic">
+                      <span id="stageMicMeterFill" class="stage-audio-icon-liquid"></span>
+                    </span>
+                  </button>
+                  <button id="stageSpeakerMeter" class="stage-audio-icon-meter" type="button" aria-label="扬声器 0%" title="扬声器 0%">
+                    <span class="stage-audio-icon speaker">
+                      <span id="stageSpeakerMeterFill" class="stage-audio-icon-liquid"></span>
+                    </span>
+                  </button>
+                </div>
+                <div class="stage-action-buttons">
+                  <button id="sessionBtn" class="btn primary stage-primary-btn">开始</button>
+                </div>
+              </div>
+            </div>
+          </main>
         </div>
       </div>
-    </aside>
+    </section>
 
-    <main class="panel stage">
-      <div class="stage-head">
-        <span id="stageTitle">实时渲染窗口</span>
-        <div id="status" class="status stage-status" data-level="neutral" aria-live="polite">
-          <span class="status-dot" aria-hidden="true"></span>
-          <span class="status-text">未连接</span>
+    <section class="project-section">
+      <div class="section-intro">
+        <div class="section-eyebrow">Abstract</div>
+        <h2>Abstract</h2>
+      </div>
+      <div class="text-card">
+        <p>
+          We present EmbodiedHead, a speech-driven talking-head framework that equips LLMs with real-time visual avatars for conversation.
+          A practical embodied avatar must achieve real-time generation, unified listening-speaking behavior, and high rendered visual quality simultaneously.
+          Our framework couples the first Rectified-Flow Diffusion Transformer (DiT) for this task with a differentiable renderer, enabling diverse,
+          high-fidelity generation in as few as four sampling steps. Prior listening-speaking methods rely on dual-stream audio, introducing an interlocutor
+          look-ahead dependency incompatible with causal user–LLM interaction. We instead adopt a single-stream interface with explicit per-frame listening-speaking
+          state conditioning and a Streaming Audio Scheduler, suppressing spurious mouth motion during listening while enabling seamless turn-taking.
+          A two-stage training scheme of coefficient-space pretraining and joint image-domain refinement further closes the gap between motion-level supervision
+          and rendered quality. Extensive experiments demonstrate state-of-the-art visual quality and motion fidelity in both speaking and listening scenarios.
+        </p>
+      </div>
+    </section>
+
+    <section class="project-section">
+      <div class="section-intro">
+        <div class="section-eyebrow">Overview</div>
+        <h2>Overview</h2>
+        <p>EmbodiedHead unifies real-time listening and speaking behavior with a single-stream audio interface, explicit LS-state conditioning, and a differentiable rendering pipeline.</p>
+      </div>
+      <div class="overview-layout">
+        <figure class="overview-figure">
+          <img src="assets/embodiedhead-fig2.png" alt="EmbodiedHead overview figure" />
+        </figure>
+        <div class="overview-points">
+          <article class="overview-point">
+            <h3>Real-Time Avatar Generation</h3>
+            <p>Rectified-Flow DiT and differentiable rendering work together to produce high-fidelity results in as few as four sampling steps.</p>
+          </article>
+          <article class="overview-point">
+            <h3>Unified Listening-Speaking Behavior</h3>
+            <p>A Streaming Audio Scheduler and explicit LS-state conditioning suppress listening-phase mouth artifacts while preserving rapid turn-taking.</p>
+          </article>
+          <article class="overview-point">
+            <h3>End-to-End Training</h3>
+            <p>Coefficient-space pretraining and image-domain refinement close the gap between motion supervision and the final rendered visual quality.</p>
+          </article>
         </div>
       </div>
-      <div class="video-wrap">
-        <canvas id="canvas" width="512" height="512"></canvas>
+    </section>
+
+    <section class="project-section">
+      <div class="section-intro">
+        <div class="section-eyebrow">Project Video</div>
+        <h2>Recorded Demonstration</h2>
+        <p>A full demonstration video of EmbodiedHead, including setup, interaction flow, and qualitative behaviors.</p>
       </div>
-      <div class="stage-foot">
-        <div class="stats" id="stats">
-          <span class="pill">WS: -</span>
-          <span class="pill">缓冲帧: -</span>
-          <span class="pill">状态: idle</span>
-        </div>
-        <div class="stage-actions">
-          <div class="stage-audio-icons" aria-label="Audio levels">
-            <button id="stageMicMeter" class="stage-audio-icon-meter" type="button" aria-label="麦克风 0%" title="麦克风 0%">
-              <span class="stage-audio-icon mic">
-                <span id="stageMicMeterFill" class="stage-audio-icon-liquid"></span>
-              </span>
-            </button>
-            <button id="stageSpeakerMeter" class="stage-audio-icon-meter" type="button" aria-label="扬声器 0%" title="扬声器 0%">
-              <span class="stage-audio-icon speaker">
-                <span id="stageSpeakerMeterFill" class="stage-audio-icon-liquid"></span>
-              </span>
-            </button>
-          </div>
-          <div class="stage-action-buttons">
-            <button id="sessionBtn" class="btn primary stage-primary-btn">开始</button>
-          </div>
-        </div>
+      <div class="video-card">
+        <video class="project-video" controls preload="metadata" playsinline poster="assets/embodiedhead-head-pic.png">
+          <source src="assets/embodiedhead-demo.mp4" type="video/mp4" />
+          Your browser does not support the video tag.
+        </video>
       </div>
-    </main>
-  </div>
+    </section>
+  </main>
 
   <div id="toastViewport" class="toast-viewport" aria-live="polite" aria-atomic="false"></div>
 
@@ -204,9 +306,9 @@
     </div>
   </div>
 
-  <script src="backend-config.js?v=20260410-1"></script>
-  <script src="static/i18n.js?v=20260410-1"></script>
-  <script src="static/app-core.js?v=20260410-1"></script>
-  <script src="static/app-runtime.js?v=20260410-1"></script>
+  <script src="backend-config.js?v=20260413-2"></script>
+  <script src="static/i18n.js?v=20260413-2"></script>
+  <script src="static/app-core.js?v=20260413-2"></script>
+  <script src="static/app-runtime.js?v=20260413-2"></script>
 </body>
 </html>
