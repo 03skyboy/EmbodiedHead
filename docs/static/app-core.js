@@ -89,7 +89,7 @@
     let isMuted = false;
     let speakerTestAudio = null;
     let isSpeakerTestPlaying = false;
-    let currentLang = localStorage.getItem("demo_lang") || "zh";
+    let currentLang = localStorage.getItem("demo_lang") || "en";
     let identitiesCache = [];
     let modelsCache = [];
     let voicesCache = [];
@@ -538,7 +538,7 @@
     }
 
     function applyLanguage() {
-      if (currentLang !== "zh" && currentLang !== "en") currentLang = "zh";
+      if (currentLang !== "zh" && currentLang !== "en") currentLang = "en";
       document.documentElement.lang = currentLang === "zh" ? "zh-CN" : "en";
       renderLangToggle();
       selfTestOpenBtn.textContent = t("selfTestLabel");
