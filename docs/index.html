@@ -4,47 +4,37 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EmbodiedHead Project Page</title>
-  <link rel="stylesheet" href="static/styles.css?v=20260413-2" />
-  <link rel="stylesheet" href="static/project-page.css?v=20260413-2" />
+  <link rel="stylesheet" href="static/styles.css?v=20260413-3" />
+  <link rel="stylesheet" href="static/project-page.css?v=20260413-3" />
 </head>
 <body class="project-page">
   <main class="project-page-shell">
-    <section class="project-hero">
-      <div class="project-hero-copy">
-        <div class="project-kicker">Project Page</div>
-        <h1 class="project-title">EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents</h1>
-        <div class="project-authors">
-          <span>Yu Zhang<sup>1*</sup></span>
-          <span>Kaiyuan Shen<sup>1*</sup></span>
-          <span>Yang Li<sup>1†</sup></span>
-        </div>
-        <div class="project-affiliation">
-          <span><sup>1</sup>School of Computer Science and Technology, East China Normal University, Shanghai, China</span>
-        </div>
-        <div class="project-notes">
-          <span>* Equal contribution.</span>
-          <span>† Corresponding author.</span>
-        </div>
-        <div class="project-links">
-          <a class="project-link" href="assets/EmbodiedHead.pdf" target="_blank" rel="noreferrer">Paper PDF</a>
-          <a class="project-link is-disabled" href="#arxiv-pending" aria-disabled="true">arXiv Pending</a>
-        </div>
+    <header class="project-hero">
+      <h1 class="project-title">EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents</h1>
+      <div class="project-authors">
+        <span class="author-name">Yu Zhang<sup>1*</sup></span>
+        <span class="author-name">Kaiyuan Shen<sup>1*</sup></span>
+        <span class="author-name">Yang Li<sup>1†</sup></span>
       </div>
-      <div class="project-hero-media">
+      <div class="project-affiliation">
+        <div><sup>1</sup>School of Computer Science and Technology, East China Normal University, Shanghai, China</div>
+        <div class="project-notes">* Equal contribution. † Corresponding author.</div>
+      </div>
+      <div class="project-links">
+        <a class="project-link" href="assets/EmbodiedHead.pdf" target="_blank" rel="noreferrer">Paper</a>
+        <a class="project-link is-disabled" href="#arxiv-pending" aria-disabled="true">arXiv</a>
+      </div>
+      <figure class="hero-figure">
         <img src="assets/embodiedhead-head-pic.png" alt="EmbodiedHead teaser figure" />
-      </div>
-    </section>
+        <figcaption>EmbodiedHead enables real-time, high-fidelity listening and speaking behavior for conversational agents.</figcaption>
+      </figure>
+    </header>
 
-    <section class="project-section project-demo-section">
-      <div class="section-intro">
-        <div class="section-eyebrow">Interactive Demo</div>
-        <h2>Talk to EmbodiedHead in Your Browser</h2>
-        <p>
-          This is the same interactive demo module used by the live service backend. You can upload an identity,
-          select the model and voice, switch modes, and launch the real-time listening-speaking avatar directly from this page.
-        </p>
+    <section id="interactive-demo" class="project-section project-demo-section">
+      <div class="section-heading">
+        <h2>Interactive Demo</h2>
+        <p>Try the live EmbodiedHead system directly in the browser. The module below is the same real interactive demo connected to the backend service.</p>
       </div>
-
       <div class="demo-showcase">
         <div class="shell">
           <aside class="panel settings">
@@ -151,63 +141,51 @@
       </div>
     </section>
 
-    <section class="project-section">
-      <div class="section-intro">
-        <div class="section-eyebrow">Abstract</div>
+    <section class="project-section abstract-section">
+      <div class="section-heading centered">
         <h2>Abstract</h2>
       </div>
-      <div class="text-card">
+      <div class="paper-card paper-card--soft">
         <p>
-          We present EmbodiedHead, a speech-driven talking-head framework that equips LLMs with real-time visual avatars for conversation.
-          A practical embodied avatar must achieve real-time generation, unified listening-speaking behavior, and high rendered visual quality simultaneously.
-          Our framework couples the first Rectified-Flow Diffusion Transformer (DiT) for this task with a differentiable renderer, enabling diverse,
-          high-fidelity generation in as few as four sampling steps. Prior listening-speaking methods rely on dual-stream audio, introducing an interlocutor
-          look-ahead dependency incompatible with causal user–LLM interaction. We instead adopt a single-stream interface with explicit per-frame listening-speaking
-          state conditioning and a Streaming Audio Scheduler, suppressing spurious mouth motion during listening while enabling seamless turn-taking.
-          A two-stage training scheme of coefficient-space pretraining and joint image-domain refinement further closes the gap between motion-level supervision
-          and rendered quality. Extensive experiments demonstrate state-of-the-art visual quality and motion fidelity in both speaking and listening scenarios.
+          We present EmbodiedHead, a speech-driven talking-head framework that equips LLMs with real-time visual avatars for conversation. A practical embodied avatar must achieve real-time generation, unified listening-speaking behavior, and high rendered visual quality simultaneously. Our framework couples the first Rectified-Flow Diffusion Transformer (DiT) for this task with a differentiable renderer, enabling diverse, high-fidelity generation in as few as four sampling steps. Prior listening-speaking methods rely on dual-stream audio, introducing an interlocutor look-ahead dependency incompatible with causal user–LLM interaction. We instead adopt a single-stream interface with explicit per-frame listening-speaking state conditioning and a Streaming Audio Scheduler, suppressing spurious mouth motion during listening while enabling seamless turn-taking. A two-stage training scheme of coefficient-space pretraining and joint image-domain refinement further closes the gap between motion-level supervision and rendered quality. Extensive experiments demonstrate state-of-the-art visual quality and motion fidelity in both speaking and listening scenarios.
         </p>
       </div>
     </section>
 
     <section class="project-section">
-      <div class="section-intro">
-        <div class="section-eyebrow">Overview</div>
+      <div class="section-heading centered">
         <h2>Overview</h2>
-        <p>EmbodiedHead unifies real-time listening and speaking behavior with a single-stream audio interface, explicit LS-state conditioning, and a differentiable rendering pipeline.</p>
       </div>
-      <div class="overview-layout">
-        <figure class="overview-figure">
-          <img src="assets/embodiedhead-fig2.png" alt="EmbodiedHead overview figure" />
-        </figure>
-        <div class="overview-points">
-          <article class="overview-point">
-            <h3>Real-Time Avatar Generation</h3>
-            <p>Rectified-Flow DiT and differentiable rendering work together to produce high-fidelity results in as few as four sampling steps.</p>
-          </article>
-          <article class="overview-point">
-            <h3>Unified Listening-Speaking Behavior</h3>
-            <p>A Streaming Audio Scheduler and explicit LS-state conditioning suppress listening-phase mouth artifacts while preserving rapid turn-taking.</p>
-          </article>
-          <article class="overview-point">
-            <h3>End-to-End Training</h3>
-            <p>Coefficient-space pretraining and image-domain refinement close the gap between motion supervision and the final rendered visual quality.</p>
-          </article>
-        </div>
-      </div>
+      <figure class="overview-figure">
+        <img src="assets/embodiedhead-fig2.png" alt="EmbodiedHead overview figure" />
+        <figcaption>Overview of EmbodiedHead, including the Rectified-Flow DiT backbone, explicit LS-state conditioning, and the Streaming Audio Scheduler.</figcaption>
+      </figure>
     </section>
 
     <section class="project-section">
-      <div class="section-intro">
-        <div class="section-eyebrow">Project Video</div>
-        <h2>Recorded Demonstration</h2>
-        <p>A full demonstration video of EmbodiedHead, including setup, interaction flow, and qualitative behaviors.</p>
+      <div class="section-heading centered">
+        <h2>Project Video</h2>
+        <p>A recorded demonstration of the complete EmbodiedHead system.</p>
       </div>
-      <div class="video-card">
+      <div class="video-card video-card--plain">
         <video class="project-video" controls preload="metadata" playsinline poster="assets/embodiedhead-head-pic.png">
           <source src="assets/embodiedhead-demo.mp4" type="video/mp4" />
           Your browser does not support the video tag.
         </video>
+      </div>
+    </section>
+
+    <section class="project-section bibtex-section">
+      <div class="section-heading">
+        <h2>BibTeX</h2>
+      </div>
+      <div class="paper-card bibtex-card">
+<pre><code>@misc{zhang2026embodiedhead,
+  title  = {EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents},
+  author = {Zhang, Yu and Shen, Kaiyuan and Li, Yang},
+  year   = {2026},
+  note   = {Preprint. Update the arXiv identifier after release.}
+}</code></pre>
       </div>
     </section>
   </main>
@@ -306,9 +284,9 @@
     </div>
   </div>
 
-  <script src="backend-config.js?v=20260413-2"></script>
-  <script src="static/i18n.js?v=20260413-2"></script>
-  <script src="static/app-core.js?v=20260413-2"></script>
-  <script src="static/app-runtime.js?v=20260413-2"></script>
+  <script src="backend-config.js?v=20260413-3"></script>
+  <script src="static/i18n.js?v=20260413-3"></script>
+  <script src="static/app-core.js?v=20260413-3"></script>
+  <script src="static/app-runtime.js?v=20260413-3"></script>
 </body>
 </html>
