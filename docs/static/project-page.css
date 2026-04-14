@@ -274,26 +274,29 @@ body.project-page::before {
 }
 
 .mini-demo-row {
-  display: flex;
-  justify-content: center;
+  display: grid;
   gap: 14px;
 }
 
-.mini-demo-row--three .mini-demo-tile {
-  width: min(31.2%, 340px);
+.mini-demo-row--three {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  max-width: 1120px;
 }
 
-.mini-demo-row--two .mini-demo-tile {
-  width: min(31.2%, 340px);
+.mini-demo-row--two {
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  width: min(744px, 100%);
+  margin: 0 auto;
 }
 
 .mini-demo-tile {
   min-width: 0;
-  flex: 0 0 auto;
+  width: 100%;
 }
 
 .mini-demo-frame {
   position: relative;
+  width: 100%;
   border-radius: 14px;
   overflow: hidden;
   background: transparent;
@@ -302,6 +305,8 @@ body.project-page::before {
 .mini-demo-frame video {
   display: block;
   width: 100%;
+  max-width: 100%;
+  height: auto;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 14px;
@@ -326,20 +331,19 @@ body.project-page::before {
 }
 
 @media (max-width: 980px) {
-  .mini-demo-row {
-    flex-wrap: wrap;
+  .mini-demo-row--three {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
-  .mini-demo-row--three .mini-demo-tile,
-  .mini-demo-row--two .mini-demo-tile {
-    width: min(47%, 340px);
+  .mini-demo-row--two {
+    width: 100%;
   }
 }
 
 @media (max-width: 760px) {
-  .mini-demo-row--three .mini-demo-tile,
-  .mini-demo-row--two .mini-demo-tile {
-    width: min(100%, 360px);
+  .mini-demo-row--three,
+  .mini-demo-row--two {
+    grid-template-columns: 1fr;
   }
 
   .mini-demo-ref-thumb {
