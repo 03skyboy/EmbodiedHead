@@ -283,8 +283,8 @@ body.project-page::before {
 
 .mini-demo-subtitle {
   margin: 0 0 38px;
-  font-size: clamp(18px, 2vw, 24px);
-  line-height: 1.4;
+  font-size: clamp(22px, 2.4vw, 28px);
+  line-height: 1.35;
   font-weight: 600;
   color: #2c3139;
   text-align: left;
