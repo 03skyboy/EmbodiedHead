@@ -315,9 +315,9 @@ body.project-page::before {
 
 .mini-demo-ref-thumb {
   position: absolute;
-  left: 10px;
-  bottom: 10px;
-  width: clamp(46px, 14%, 72px);
+  left: 12px;
+  bottom: 44px;
+  width: clamp(58px, 18%, 88px);
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 10px;
@@ -347,6 +347,6 @@ body.project-page::before {
   }
 
   .mini-demo-ref-thumb {
-    width: 60px;
+    width: 72px;
   }
 }
