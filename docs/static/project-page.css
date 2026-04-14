@@ -113,7 +113,7 @@ body.project-page::before {
 
 .hero-figure figcaption,
 .overview-figure figcaption {
-  margin-top: 12px;
+  margin-top: 6px;
   text-align: center;
   font-size: 15px;
   color: #4f5663;
@@ -180,10 +180,11 @@ body.project-page::before {
   display: block;
   width: 100%;
   height: auto;
+  aspect-ratio: 1920 / 1080;
   border-radius: 0;
   border: 0;
   box-shadow: none;
-  background: #000;
+  background: transparent;
 }
 
 .bibtex-card {
