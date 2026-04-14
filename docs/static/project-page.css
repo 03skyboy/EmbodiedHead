@@ -286,7 +286,7 @@ body.project-page::before {
 
 .mini-demo-stack {
   display: grid;
-  gap: 18px;
+  gap: 30px;
   margin: 0 auto 18px;
 }
 
@@ -346,17 +346,21 @@ body.project-page::before {
 
 .comparison-demo-stack {
   display: grid;
-  gap: 40px;
+  gap: 14px;
   margin: 0 auto;
-  max-width: 860px;
+  max-width: 1120px;
 }
 
 .comparison-demo-tile {
   width: 100%;
-  max-width: 760px;
+  max-width: 100%;
   margin: 0 auto;
-  padding-left: 96px;
-  padding-bottom: 18px;
+  padding-left: 118px;
+  padding-bottom: 0;
+}
+
+.comparison-demo-tile + .comparison-demo-tile {
+  margin-top: 2px;
 }
 
 .comparison-demo-frame {
@@ -373,16 +377,16 @@ body.project-page::before {
   max-width: 100%;
   height: auto;
   aspect-ratio: 16 / 9;
-  object-fit: cover;
+  object-fit: contain;
   border-radius: 14px;
   background: #000;
 }
 
 .comparison-ref-thumb {
   position: absolute;
-  left: -96px;
-  bottom: -18px;
-  width: 92px;
+  left: -118px;
+  bottom: 0;
+  width: 108px;
   aspect-ratio: 1 / 1;
   object-fit: cover;
   border-radius: 0;
@@ -405,14 +409,14 @@ body.project-page::before {
   }
 
   .comparison-demo-tile {
-    padding-left: 80px;
-    padding-bottom: 14px;
+    padding-left: 96px;
+    padding-bottom: 0;
   }
 
   .comparison-ref-thumb {
-    left: -80px;
-    bottom: -14px;
-    width: 76px;
+    left: -96px;
+    bottom: 0;
+    width: 88px;
   }
 }
 
@@ -423,7 +427,7 @@ body.project-page::before {
   }
 
   .comparison-demo-stack {
-    gap: 96px;
+    gap: 72px;
   }
 
   .mini-demo-tile {
@@ -442,7 +446,7 @@ body.project-page::before {
 
   .comparison-ref-thumb {
     left: 0;
-    bottom: -78px;
-    width: 78px;
+    bottom: -84px;
+    width: 88px;
   }
 }
