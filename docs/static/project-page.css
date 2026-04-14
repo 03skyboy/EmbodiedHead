@@ -113,10 +113,11 @@ body.project-page::before {
 
 .hero-figure figcaption,
 .overview-figure figcaption {
-  margin-top: 6px;
+  margin-top: 0;
   text-align: center;
   font-size: 15px;
   color: #4f5663;
+  line-height: 1.2;
 }
 
 .project-section {
@@ -283,6 +284,12 @@ body.project-page::before {
 
 .comparison-subtitle {
   margin-top: 78px;
+  margin-bottom: 18px;
+}
+
+.chatting-subtitle {
+  margin-top: 46px;
+  margin-bottom: 20px;
 }
 
 .mini-demo-stack {
@@ -397,7 +404,7 @@ body.project-page::before {
 }
 
 .video-card--feature {
-  margin-top: 132px;
+  margin-top: 0;
 }
 
 @media (max-width: 980px) {
@@ -450,4 +457,17 @@ body.project-page::before {
     bottom: -84px;
     width: 88px;
   }
+}
+
+.bibtex-section .section-heading {
+  text-align: center;
+}
+
+.bibtex-card {
+  text-align: center;
+}
+
+.bibtex-card pre {
+  display: inline-block;
+  text-align: left;
 }
