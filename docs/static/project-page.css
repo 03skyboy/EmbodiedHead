@@ -376,10 +376,10 @@ body.project-page::before {
   width: 100%;
   max-width: 100%;
   height: auto;
-  aspect-ratio: 16 / 9;
-  object-fit: contain;
+  aspect-ratio: auto;
+  object-fit: fill;
   border-radius: 14px;
-  background: #000;
+  background: transparent;
 }
 
 .comparison-ref-thumb {
