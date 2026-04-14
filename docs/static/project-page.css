@@ -376,7 +376,7 @@ body.project-page::before {
   width: 100%;
   max-width: 100%;
   height: auto;
-  aspect-ratio: auto;
+  aspect-ratio: 2534 / 1080;
   object-fit: fill;
   border-radius: 14px;
   background: transparent;
