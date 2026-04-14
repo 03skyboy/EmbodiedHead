@@ -111,7 +111,14 @@ body.project-page::before {
   background: transparent;
 }
 
-.hero-figure figcaption,
+.hero-figure figcaption {
+  margin-top: 12px;
+  text-align: center;
+  font-size: 15px;
+  color: #4f5663;
+  line-height: 1.2;
+}
+
 .overview-figure figcaption {
   margin-top: -28px;
   text-align: center;
