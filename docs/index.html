@@ -5,13 +5,12 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EmbodiedHead Project Page</title>
   <link rel="stylesheet" href="static/styles.css?v=20260413-3" />
-  <link rel="stylesheet" href="static/project-page.css?v=20260414-13" />
+  <link rel="stylesheet" href="static/project-page.css?v=20260621-1" />
 </head>
 <body class="project-page">
   <main class="project-page-shell">
     <header class="project-hero">
       <h1 class="project-title">EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents</h1>
-      <!-- Restore after acceptance:
       <div class="project-authors">
         <span class="author-name">Yu Zhang<sup>1*</sup></span>
         <span class="author-name">Kaiyuan Shen<sup>1*</sup></span>
@@ -22,19 +21,22 @@
         <div><sup>2</sup>Garabido Shanghai Technology Co., Ltd., Shanghai, China</div>
         <div class="project-notes">* Equal contribution. † Corresponding author.</div>
       </div>
-      -->
-      <div class="project-authors">
-        <span class="author-name">Anonymous Authors</span>
-      </div>
-      <div class="project-affiliation">
-        <div>Author information is temporarily withheld for anonymous review.</div>
-      </div>
       <div class="project-links">
         <a class="project-link" href="assets/embodiedhead.pdf" target="_blank" rel="noreferrer">Paper</a>
         <a class="project-link" href="https://arxiv.org/abs/2604.17211" target="_blank" rel="noreferrer">arXiv</a>
+        <span class="project-link is-disabled" aria-disabled="true">Code (coming soon)</span>
       </div>
       <figure class="hero-figure">
-        <img src="assets/embodiedhead-head-pic.png" alt="EmbodiedHead teaser figure" />
+        <div class="figure-pdf-shell" style="--figure-ratio: 1382 / 537;">
+          <object
+            class="figure-pdf"
+            data="assets/mainpic.pdf#toolbar=0&amp;navpanes=0&amp;scrollbar=0&amp;view=FitH"
+            type="application/pdf"
+            aria-label="EmbodiedHead teaser figure"
+          >
+            <a class="figure-pdf-fallback" href="assets/mainpic.pdf" target="_blank" rel="noreferrer">Open the teaser figure PDF</a>
+          </object>
+        </div>
         <figcaption>We present EmbodiedHead, which generates a real-time head-embodied avatar
 for LLMs. Unlike dual-audio methods, it uses a single audio stream with explicit
 listening-speaking state conditioning to achieve unified conversational behavior.</figcaption>
@@ -169,7 +171,16 @@ listening-speaking state conditioning to achieve unified conversational behavior
         <h2>Overview</h2>
       </div>
       <figure class="overview-figure">
-        <img src="assets/embodiedhead-fig2.png" alt="EmbodiedHead overview figure" />
+        <div class="figure-pdf-shell" style="--figure-ratio: 1380 / 600;">
+          <object
+            class="figure-pdf"
+            data="assets/overview.pdf#toolbar=0&amp;navpanes=0&amp;scrollbar=0&amp;view=FitH"
+            type="application/pdf"
+            aria-label="EmbodiedHead overview figure"
+          >
+            <a class="figure-pdf-fallback" href="assets/overview.pdf" target="_blank" rel="noreferrer">Open the overview figure PDF</a>
+          </object>
+        </div>
         <figcaption>Overview of EmbodiedHead. It employs a Rectified-Flow DiT to generate speech-driven talking-head animation in a few steps. It conditions on the reference, timestep, motion magnitude, and LS-state. A streaming scheduler merges user and LLM audio, enabling unified listening-speaking behavior.</figcaption>
       </figure>
     </section>
@@ -261,7 +272,7 @@ listening-speaking state conditioning to achieve unified conversational behavior
           </div>
         </div>
 
-        <div class="mini-demo-subtitle comparison-subtitle">Comparison</div>
+        <div class="mini-demo-subtitle comparison-subtitle">Comparison in Standard Speaking Scenarios</div>
         <div class="comparison-demo-stack" aria-label="EmbodiedHead comparison gallery">
           <article class="comparison-demo-tile">
             <div class="comparison-demo-frame">
@@ -289,7 +300,7 @@ listening-speaking state conditioning to achieve unified conversational behavior
           </article>
         </div>
 
-        <div class="mini-demo-subtitle chatting-subtitle">Chatting with EmbodiedHead</div>
+        <div class="mini-demo-subtitle chatting-subtitle">Comparison in Interactive Listening-Speaking Scenarios</div>
         <div class="video-card video-card--plain video-card--feature">
           <video class="project-video" controls preload="metadata" playsinline poster="assets/embodiedhead-demo-poster.png?v=20260414-10">
             <source src="assets/embodiedhead-demo.mp4?v=20260414-10" type="video/mp4" />
@@ -304,21 +315,10 @@ listening-speaking state conditioning to achieve unified conversational behavior
         <h2>BibTeX</h2>
       </div>
       <div class="paper-card bibtex-card">
-<!-- Restore after acceptance:
 <pre><code>@misc{zhang2026embodiedhead,
   title  = {EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents},
   author = {Zhang, Yu and Shen, Kaiyuan and Li, Yang},
   year   = {2026},
-  eprint = {2604.17211},
-  archivePrefix = {arXiv},
-  url    = {https://arxiv.org/abs/2604.17211}
-}</code></pre>
--->
-<pre><code>@misc{anonymous2026embodiedhead,
-  title  = {EmbodiedHead: Real-Time Listening and Speaking Avatar for Conversational Agents},
-  author = {Anonymous Authors},
-  year   = {2026},
-  note   = {Author information withheld for anonymous review},
   eprint = {2604.17211},
   archivePrefix = {arXiv},
   url    = {https://arxiv.org/abs/2604.17211}
