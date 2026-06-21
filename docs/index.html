@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EmbodiedHead Project Page</title>
   <link rel="stylesheet" href="static/styles.css?v=20260413-3" />
-  <link rel="stylesheet" href="static/project-page.css?v=20260621-1" />
+  <link rel="stylesheet" href="static/project-page.css?v=20260621-2" />
 </head>
 <body class="project-page">
   <main class="project-page-shell">
@@ -27,15 +27,9 @@
         <span class="project-link is-disabled" aria-disabled="true">Code (coming soon)</span>
       </div>
       <figure class="hero-figure">
-        <div class="figure-pdf-shell" style="--figure-ratio: 1382 / 537;">
-          <object
-            class="figure-pdf"
-            data="assets/mainpic.pdf#toolbar=0&amp;navpanes=0&amp;scrollbar=0&amp;view=FitH"
-            type="application/pdf"
-            aria-label="EmbodiedHead teaser figure"
-          >
-            <a class="figure-pdf-fallback" href="assets/mainpic.pdf" target="_blank" rel="noreferrer">Open the teaser figure PDF</a>
-          </object>
+        <div class="figure-pdf-shell js-pdf-figure" data-pdf-src="assets/mainpic.pdf" style="--figure-ratio: 1382 / 537;">
+          <canvas class="figure-pdf-canvas" aria-label="EmbodiedHead teaser figure"></canvas>
+          <a class="figure-pdf-fallback" href="assets/mainpic.pdf" target="_blank" rel="noreferrer">Open the teaser figure PDF</a>
         </div>
         <figcaption>We present EmbodiedHead, which generates a real-time head-embodied avatar
 for LLMs. Unlike dual-audio methods, it uses a single audio stream with explicit
@@ -171,15 +165,9 @@ listening-speaking state conditioning to achieve unified conversational behavior
         <h2>Overview</h2>
       </div>
       <figure class="overview-figure">
-        <div class="figure-pdf-shell" style="--figure-ratio: 1380 / 600;">
-          <object
-            class="figure-pdf"
-            data="assets/overview.pdf#toolbar=0&amp;navpanes=0&amp;scrollbar=0&amp;view=FitH"
-            type="application/pdf"
-            aria-label="EmbodiedHead overview figure"
-          >
-            <a class="figure-pdf-fallback" href="assets/overview.pdf" target="_blank" rel="noreferrer">Open the overview figure PDF</a>
-          </object>
+        <div class="figure-pdf-shell js-pdf-figure" data-pdf-src="assets/overview.pdf" style="--figure-ratio: 1380 / 600;">
+          <canvas class="figure-pdf-canvas" aria-label="EmbodiedHead overview figure"></canvas>
+          <a class="figure-pdf-fallback" href="assets/overview.pdf" target="_blank" rel="noreferrer">Open the overview figure PDF</a>
         </div>
         <figcaption>Overview of EmbodiedHead. It employs a Rectified-Flow DiT to generate speech-driven talking-head animation in a few steps. It conditions on the reference, timestep, motion magnitude, and LS-state. A streaming scheduler merges user and LLM audio, enabling unified listening-speaking behavior.</figcaption>
       </figure>
@@ -300,7 +288,10 @@ listening-speaking state conditioning to achieve unified conversational behavior
           </article>
         </div>
 
-        <div class="mini-demo-subtitle chatting-subtitle">Comparison in Interactive Listening-Speaking Scenarios</div>
+        <div class="mini-demo-subtitle interactive-comparison-subtitle">Comparison in Interactive Listening-Speaking Scenarios</div>
+        <div class="interactive-comparison-placeholder" aria-hidden="true"></div>
+
+        <div class="mini-demo-subtitle chatting-subtitle">Chatting with EmbodiedHead</div>
         <div class="video-card video-card--plain video-card--feature">
           <video class="project-video" controls preload="metadata" playsinline poster="assets/embodiedhead-demo-poster.png?v=20260414-10">
             <source src="assets/embodiedhead-demo.mp4?v=20260414-10" type="video/mp4" />
@@ -422,6 +413,7 @@ listening-speaking state conditioning to achieve unified conversational behavior
   </div>
 
   <script src="backend-config.js?v=20260413-4"></script>
+  <script type="module" src="static/project-page-pdf.js?v=20260621-1"></script>
   <script src="static/i18n.js?v=20260413-4"></script>
   <script src="static/app-core.js?v=20260413-4"></script>
   <script src="static/app-runtime.js?v=20260413-4"></script>
