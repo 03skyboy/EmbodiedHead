@@ -333,7 +333,7 @@ body.project-page::before {
 
 .comparison-subtitle {
   margin-top: 78px;
-  margin-bottom: 18px;
+  margin-bottom: 4px;
 }
 
 .interactive-comparison-subtitle {
@@ -421,28 +421,58 @@ body.project-page::before {
 }
 
 .comparison-carousel-viewport {
+  position: relative;
   overflow: hidden;
   border-radius: 16px;
   background: transparent;
+  aspect-ratio: 2534 / 1080;
 }
 
 .comparison-carousel-track {
-  display: flex;
+  position: relative;
   width: 100%;
-  transition: transform .32s ease;
-  will-change: transform;
+  height: 100%;
 }
 
 .comparison-carousel-slide {
-  min-width: 100%;
+  position: absolute;
+  inset: 0;
+  opacity: 0;
+  visibility: hidden;
+  pointer-events: none;
+  transition: opacity .24s ease;
+}
+
+.comparison-carousel-slide.is-active {
+  opacity: 1;
+  visibility: visible;
+  pointer-events: auto;
+}
+
+.comparison-carousel-poster {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
   width: 100%;
+  height: 100%;
+  object-fit: fill;
+  border-radius: 16px;
+  pointer-events: auto;
+  cursor: pointer;
+  transition: opacity .18s ease, visibility .18s ease;
+}
+
+.comparison-carousel-slide.is-poster-hidden .comparison-carousel-poster {
+  opacity: 0;
+  visibility: hidden;
 }
 
 .comparison-carousel-video {
   display: block;
+  position: relative;
+  z-index: 0;
   width: 100%;
-  height: auto;
-  aspect-ratio: 2534 / 1080;
+  height: 100%;
   object-fit: fill;
   border-radius: 16px;
   background: #000;
