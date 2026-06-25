@@ -421,7 +421,7 @@ body.project-page::before {
   overflow: hidden;
   border-radius: 16px;
   background: transparent;
-  aspect-ratio: 2534 / 1080;
+  aspect-ratio: var(--comparison-carousel-ratio, 2534 / 1080);
 }
 
 .comparison-carousel-track {
@@ -452,6 +452,10 @@ body.project-page::before {
   object-fit: fill;
   border-radius: 16px;
   background: #000;
+}
+
+.comparison-carousel--interactive {
+  max-width: 960px;
 }
 
 .comparison-carousel-arrow {
