@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>EmbodiedHead Project Page</title>
   <link rel="stylesheet" href="static/styles.css?v=20260413-3" />
-  <link rel="stylesheet" href="static/project-page.css?v=20260624-4" />
+  <link rel="stylesheet" href="static/project-page.css?v=20260625-1" />
 </head>
 <body class="project-page">
   <main class="project-page-shell">
@@ -297,7 +297,52 @@ listening-speaking state conditioning to achieve unified conversational behavior
         </div>
 
         <div class="mini-demo-subtitle interactive-comparison-subtitle">Comparison in Interactive Listening-Speaking Scenarios</div>
-        <div class="interactive-comparison-placeholder" aria-hidden="true"></div>
+        <div class="comparison-carousel" aria-label="EmbodiedHead interactive comparison gallery" data-comparison-carousel tabindex="0">
+          <div class="comparison-carousel-stage">
+            <button class="comparison-carousel-arrow comparison-carousel-arrow--prev" type="button" aria-label="Previous interactive comparison video" data-carousel-prev>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.7 5.3a1 1 0 0 1 0 1.4L9.41 12l5.3 5.3a1 1 0 0 1-1.42 1.4l-6-6a1 1 0 0 1 0-1.4l6-6a1 1 0 0 1 1.42 0Z"></path></svg>
+            </button>
+            <div class="comparison-carousel-viewport">
+              <div class="comparison-carousel-track" data-carousel-track>
+                <article class="comparison-carousel-slide" aria-hidden="false">
+                  <video class="comparison-carousel-video" controls preload="metadata" playsinline poster="assets/interactive-comparison-poster-01.png?v=20260625-1">
+                    <source src="assets/1-1.mp4?v=20260625-1" type="video/mp4" />
+                  </video>
+                </article>
+                <article class="comparison-carousel-slide" aria-hidden="true">
+                  <video class="comparison-carousel-video" controls preload="metadata" playsinline poster="assets/interactive-comparison-poster-02.png?v=20260625-1">
+                    <source src="assets/2-2.mp4?v=20260625-1" type="video/mp4" />
+                  </video>
+                </article>
+                <article class="comparison-carousel-slide" aria-hidden="true">
+                  <video class="comparison-carousel-video" controls preload="metadata" playsinline poster="assets/interactive-comparison-poster-03.png?v=20260625-1">
+                    <source src="assets/3-3.mp4?v=20260625-1" type="video/mp4" />
+                  </video>
+                </article>
+                <article class="comparison-carousel-slide" aria-hidden="true">
+                  <video class="comparison-carousel-video" controls preload="metadata" playsinline poster="assets/interactive-comparison-poster-04.png?v=20260625-1">
+                    <source src="assets/4-4.mp4?v=20260625-1" type="video/mp4" />
+                  </video>
+                </article>
+                <article class="comparison-carousel-slide" aria-hidden="true">
+                  <video class="comparison-carousel-video" controls preload="metadata" playsinline poster="assets/interactive-comparison-poster-05.png?v=20260625-1">
+                    <source src="assets/5-5.mp4?v=20260625-1" type="video/mp4" />
+                  </video>
+                </article>
+              </div>
+            </div>
+            <button class="comparison-carousel-arrow comparison-carousel-arrow--next" type="button" aria-label="Next interactive comparison video" data-carousel-next>
+              <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.3 18.7a1 1 0 0 1 0-1.4l5.29-5.3-5.3-5.3a1 1 0 1 1 1.42-1.4l6 6a1 1 0 0 1 0 1.4l-6 6a1 1 0 0 1-1.42 0Z"></path></svg>
+            </button>
+          </div>
+          <div class="comparison-carousel-dots" aria-label="Interactive comparison slide navigation">
+            <button class="comparison-carousel-dot is-active" type="button" aria-label="Show interactive comparison video 1" aria-current="true" data-carousel-dot="0"></button>
+            <button class="comparison-carousel-dot" type="button" aria-label="Show interactive comparison video 2" aria-current="false" data-carousel-dot="1"></button>
+            <button class="comparison-carousel-dot" type="button" aria-label="Show interactive comparison video 3" aria-current="false" data-carousel-dot="2"></button>
+            <button class="comparison-carousel-dot" type="button" aria-label="Show interactive comparison video 4" aria-current="false" data-carousel-dot="3"></button>
+            <button class="comparison-carousel-dot" type="button" aria-label="Show interactive comparison video 5" aria-current="false" data-carousel-dot="4"></button>
+          </div>
+        </div>
 
         <div class="mini-demo-subtitle chatting-subtitle">Chatting with EmbodiedHead</div>
         <div class="video-card video-card--plain video-card--feature">

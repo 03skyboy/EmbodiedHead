@@ -338,11 +338,7 @@ body.project-page::before {
 
 .interactive-comparison-subtitle {
   margin-top: 58px;
-  margin-bottom: 0;
-}
-
-.interactive-comparison-placeholder {
-  min-height: 76px;
+  margin-bottom: 18px;
 }
 
 .chatting-subtitle {
