@@ -21,6 +21,46 @@ body.project-page::before {
   padding: 32px 0 96px;
 }
 
+.project-page video:fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+.project-page video:-webkit-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+.project-page video:-moz-full-screen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+.project-page video:-ms-fullscreen {
+  width: 100vw !important;
+  height: 100vh !important;
+  aspect-ratio: auto !important;
+  object-fit: contain !important;
+  border-radius: 0 !important;
+  background: #000 !important;
+}
+
+.project-page video:fullscreen::backdrop {
+  background: #000;
+}
+
 .project-hero {
   padding: 8px 0 24px;
   text-align: center;
@@ -249,6 +289,19 @@ body.project-page::before {
   font-size: 14px;
   line-height: 1.7;
   color: #2e3440;
+}
+
+.project-footer {
+  margin-top: 44px;
+  text-align: center;
+}
+
+.project-footer small {
+  display: inline-block;
+  max-width: 980px;
+  font-size: 12px;
+  line-height: 1.6;
+  color: #7a808d;
 }
 
 .project-demo-section .demo-showcase {
